@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QTimer>
+#include <QKeyEvent>
+
 #include "game.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,11 +22,14 @@ public:
 
     virtual void paintEvent(QPaintEvent *event);
 
-    void Update();
+    void UpdateGraphics();
 
     Game *game = new Game();
 
     QTimer *timer = new QTimer(this);
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *ui;

@@ -12,11 +12,13 @@ public:
     Game();
 
     void Init();
-    void Update(QPainter *p);
+    void Update();
+    void Draw(QPainter *p);
 
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    void KeyBoardInput(QKeyEvent *key);
+
+
+private:
 
     Player player = Player(400, 500);
 };

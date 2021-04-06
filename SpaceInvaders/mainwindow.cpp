@@ -1,12 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-     connect(timer, &QTimer::timeout, this, &MainWindow::Update);
+     connect(timer, &QTimer::timeout, this, this->UpdateGraphics);
+     timer->setInterval(33);
+     timer->start();
 
 }
 
@@ -28,10 +31,16 @@ void MainWindow::paintEvent(QPaintEvent *e)
     painter.setPen(Qt::PenStyle::NoPen);
     painter.setBrush(brush);
 
-    game->Update(&painter);
+    game->Draw(&painter);
 }
 
-void MainWindow::Update()
+void MainWindow::UpdateGraphics()
 {
-    this->Update();
+    game->Update(); // Update game objects before draw
+    this->update();// ui update
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    game->KeyBoardInput(event);
 }
