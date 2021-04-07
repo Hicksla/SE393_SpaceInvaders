@@ -10,13 +10,21 @@ public:
 
     void Update();
 
+    void ClearMovement();
+    void SetMovingRight();
+    void SetMovingLeft();
+
 public:
     int x;
     int y;
+    int xVel = 0;
     int w = 25;
     int h = 25;
 
     QRect rect;
+
+    bool movingLeft = false;
+    bool movingRight = false;
 
 private:
 

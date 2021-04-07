@@ -30,6 +30,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *ui;

@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     bullet.cpp \
+    collisiondetector.cpp \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     bullet.h \
+    collisiondetector.h \
     game.h \
     mainwindow.h \
     player.h

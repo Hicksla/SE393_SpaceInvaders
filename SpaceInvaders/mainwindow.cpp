@@ -42,5 +42,10 @@ void MainWindow::UpdateGraphics()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    game->KeyBoardInput(event);
+    game->KeyBoardInput(event, PRESS);
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    game->KeyBoardInput(event, RELEASE);
 }

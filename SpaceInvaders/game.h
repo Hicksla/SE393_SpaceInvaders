@@ -4,11 +4,15 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <vector>
+#include <QTimer>
 
 #include "player.h"
 #include "bullet.h"
+#include "collisiondetector.h"
 
-class Game
+enum KeyActionType {PRESS, RELEASE};
+
+class Game : public QObject
 {
 public:
     Game();
@@ -18,16 +22,22 @@ public:
     void Draw(QPainter *p);
     void CheckCollisions();
 
-    void KeyBoardInput(QKeyEvent *key);
+    void SetCanShoot();
 
+    void KeyBoardInput(QKeyEvent *key, KeyActionType action);
+
+    QTimer *timer = new QTimer;
 
 private:
 
+    CollisionDetector collisionDetect;
+
     Player player = Player(400, 500);
-
-    QRect enemies1[13]; //need to make types of enemies
-
+    std::vector<QRect> enemies1; //need to make types of enemies
     std::vector<Bullet> bullets;
+
+    bool ShootTimeOut = true;
+
 
 };
 
