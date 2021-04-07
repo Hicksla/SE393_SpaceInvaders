@@ -66,13 +66,19 @@ void Game::CheckCollisions()
 
 }
 
-void Game::Draw(QPainter *p)
+void Game::Draw(QPainter *p, QBrush *brush)
 {
 
+    brush->setColor(QColor(0, 0, 255));
+    p->setBrush(*brush);
     p->drawRect(player.rect);
 
+    brush->setColor(QColor(255,0,0));
+    p->setBrush(*brush);
     p->drawRects(enemies1.data(), enemies1.size());
 
+    brush->setColor(QColor(255,69,0));
+    p->setBrush(*brush);
     for (unsigned int i=0; i< bullets.size(); i++)
     {
         p->drawEllipse(bullets[i].circle);

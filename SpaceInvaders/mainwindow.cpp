@@ -24,14 +24,11 @@ void MainWindow::paintEvent(QPaintEvent *e)
     QPainter painter(this);
 
     QBrush brush;
-
-    brush.setColor(QColor(255,0,0));
     brush.setStyle(Qt::BrushStyle::SolidPattern);
-
     painter.setPen(Qt::PenStyle::NoPen);
     painter.setBrush(brush);
 
-    game->Draw(&painter);
+    game->Draw(&painter, &brush);
 }
 
 void MainWindow::UpdateGraphics()

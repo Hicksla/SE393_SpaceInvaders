@@ -10,7 +10,13 @@ Player::Player(int X, int Y)
 
 void Player::Update()
 {
-    x += xVel;
+    if ((rect.topRight().x() + xVel) > 800 || (rect.topLeft().x()+xVel) <0)
+    {
+        xVel = 0;
+    }else
+    {
+       x += xVel;
+    }
     rect.setRect(x, y, w, h);
 }
 

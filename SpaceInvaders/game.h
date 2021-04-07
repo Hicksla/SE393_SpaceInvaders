@@ -19,7 +19,7 @@ public:
 
     void Init();
     void Update();
-    void Draw(QPainter *p);
+    void Draw(QPainter *p, QBrush *brush);
     void CheckCollisions();
 
     void SetCanShoot();
@@ -37,7 +37,6 @@ private:
     std::vector<Bullet> bullets;
 
     bool ShootTimeOut = true;
-
 
 };
 
