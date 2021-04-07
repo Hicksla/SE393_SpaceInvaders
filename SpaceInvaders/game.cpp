@@ -56,7 +56,7 @@ void Game::CheckCollisions()
     {
         for (unsigned int j=0; j < enemies1.size(); j++)
         {
-            if (collisionDetect.RectCollsion(enemies1[j], bullets[i].circle))
+            if (collisionDetect.RectCollsion(bullets[i].circle, enemies1[j]))
             {
                 enemies1.erase(enemies1.begin() + j);
                 bullets.erase(bullets.begin() + i);
@@ -71,7 +71,7 @@ void Game::Draw(QPainter *p)
 
     p->drawRect(player.rect);
 
-    p->drawRects(enemies1.data(), 13);
+    p->drawRects(enemies1.data(), enemies1.size());
 
     for (unsigned int i=0; i< bullets.size(); i++)
     {
