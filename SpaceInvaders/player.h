@@ -13,8 +13,8 @@ public:
 public:
     int x;
     int y;
-    int w = 50;
-    int h = 50;
+    int w = 25;
+    int h = 25;
 
     QRect rect;
 

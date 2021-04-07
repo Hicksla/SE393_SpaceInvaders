@@ -10,5 +10,5 @@ Player::Player(int X, int Y)
 
 void Player::Update()
 {
-    rect = QRect(x, y, w, h);
+    rect.setRect(x, y, w, h);
 }
