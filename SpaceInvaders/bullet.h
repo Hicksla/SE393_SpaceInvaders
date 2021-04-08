@@ -13,7 +13,7 @@ public:
     int x;
     int y;
     int width = 10;
-    int yVel = 5;
+    int yVel = 15;
 
     QRect circle;
 };

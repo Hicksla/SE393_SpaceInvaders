@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
      connect(timer, &QTimer::timeout, this, &MainWindow::UpdateGraphics);
-     timer->setInterval(33);
+     timer->setInterval(16);
      timer->start();
 
 }
