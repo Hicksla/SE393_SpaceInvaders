@@ -7,6 +7,7 @@
 #include <QTimer>
 
 #include "player.h"
+#include "enemy.h"
 #include "bullet.h"
 #include "collisiondetector.h"
 
@@ -33,7 +34,7 @@ private:
     CollisionDetector collisionDetect;
 
     Player player = Player(400, 500);
-    std::vector<QRect> enemies;//need to make types of enemies
+    std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
 
     bool ShootTimeOut = true;

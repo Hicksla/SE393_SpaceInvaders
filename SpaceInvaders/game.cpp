@@ -17,41 +17,58 @@ void Game::Init()
     {
         for (int j=0; j < 13; j++)
         {
+            Enemy newEnemey;
             if (i == 0){
                 if (j==0)
-                enemies.push_back(QRect(55, 40, 20, 20));
+                {
+                    newEnemey.SetRect(QRect(55, 40, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
                 else
                 {
-                    enemies.push_back(QRect(enemies[j-1].x() + 55, 40, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 40, 20, 20));
+                    enemies.push_back(newEnemey);
                 }
             }
 
             else if (i == 1){
                 if (j==0)
-                enemies.push_back(QRect(55, 80, 20, 20));
+                {
+                    newEnemey.SetRect(QRect(55, 80, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
                 else
                 {
-                    enemies.push_back(QRect(enemies[j-1].x() + 55, 80, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 80, 20, 20));
+                    enemies.push_back(newEnemey);
                 }
 
             }
 
             else if (i == 2){
                 if (j==0)
-                enemies.push_back(QRect(55, 120, 20, 20));
+                {
+                    newEnemey.SetRect(QRect(55, 120, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
                 else
                 {
-                    enemies.push_back(QRect(enemies[j-1].x() + 55, 120, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 120, 20, 20));
+                    enemies.push_back(newEnemey);
                 }
 
             }
 
             else if (i == 3){
                 if (j==0)
-                enemies.push_back(QRect(55, 160, 20, 20));
+                {
+                    newEnemey.SetRect(QRect(55, 160, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
                 else
                 {
-                    enemies.push_back(QRect(enemies[j-1].x() + 55, 160, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 160, 20, 20));
+                    enemies.push_back(newEnemey);
                 }
 
             }
@@ -85,7 +102,7 @@ void Game::CheckCollisions()
     {
         for (unsigned int j=0; j < enemies.size(); j++)
         {
-            if (collisionDetect.RectCollsion(bullets[i].circle, enemies[j]))
+            if (collisionDetect.RectCollsion(bullets[i].circle, enemies[j].rect))
             {
                 enemies.erase(enemies.begin() + j);
                 bullets.erase(bullets.begin() + i);
@@ -104,7 +121,11 @@ void Game::Draw(QPainter *p, QBrush *brush)
 
     brush->setColor(QColor(255,0,0));
     p->setBrush(*brush);
-    p->drawRects(enemies.data(), enemies.size());
+
+    for (unsigned int i=0; i<enemies.size(); i++)
+    {
+        p->drawRect(enemies[i].rect);
+    }
 
     brush->setColor(QColor(255,69,0));
     p->setBrush(*brush);
