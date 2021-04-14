@@ -3,20 +3,29 @@
 
 Game::Game()
 {
-    Init();
     connect(timer, &QTimer::timeout, this, &Game::SetCanShoot);
     timer->setInterval(500);
-
     connect(enemyTimer, &QTimer::timeout, this, &Game::UpdateEnemyLoc);
-    enemyTimer->setInterval(1000);
+
+    collisionDetect = CollisionDetector();
+
+}
+void Game::AddFpsTimer(QTimer *timer)
+{
+    fpsTimer = timer;
+    Init();
 }
 
-void Game::Init()
+void Game::loadPlayer()
 {
-    collisionDetect = CollisionDetector();
     player = Player(400, 500);
+    player.Alive = true;
 
-    for (int i=0; i < 4; i++)
+}
+
+void Game::loadEnemies()
+{
+    for (int i=0; i < 5; i++)
     {
         for (int j=0; j < 13; j++)
         {
@@ -24,12 +33,12 @@ void Game::Init()
             if (i == 0){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(55, 40, 20, 20));
+                    newEnemey.SetRect(QRect(150, 80, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 40, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 40, 80, 20, 20));
                     enemies.push_back(newEnemey);
                 }
             }
@@ -37,12 +46,12 @@ void Game::Init()
             else if (i == 1){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(55, 80, 20, 20));
+                    newEnemey.SetRect(QRect(150, 120, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 80, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 40, 120, 20, 20));
                     enemies.push_back(newEnemey);
                 }
 
@@ -51,12 +60,12 @@ void Game::Init()
             else if (i == 2){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(55, 120, 20, 20));
+                    newEnemey.SetRect(QRect(150, 160, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 120, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 40, 160, 20, 20));
                     enemies.push_back(newEnemey);
                 }
 
@@ -65,29 +74,69 @@ void Game::Init()
             else if (i == 3){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(55, 160, 20, 20));
+                    newEnemey.SetRect(QRect(150, 200, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 55, 160, 20, 20));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 40, 200, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
+
+            }
+            else if (i == 4){
+                if (j==0)
+                {
+                    newEnemey.SetRect(QRect(150, 240, 20, 20));
+                    enemies.push_back(newEnemey);
+                }
+                else
+                {
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 40, 240, 20, 20));
                     enemies.push_back(newEnemey);
                 }
 
             }
         }
     }
+}
+
+void Game::unloadEnemies()
+{
+    enemies.clear();
+    bullets.clear();
+}
+
+void Game::Init()
+{
+
+    if (!player.Alive)
+    {
+        loadPlayer();
+    }
+
+    loadEnemies();
+
+    enemyTimer->setInterval(EnemySpeed);
+    fpsTimer->start();
     enemyTimer->start();
 }
 
 void Game::Update()
 {
-    CheckCollisions();
-    player.Update();
-
-    for (unsigned int i=0; i< bullets.size(); i++)
+    if (enemies.size() <= 0)
     {
-        bullets[i].Update();
+        fpsTimer->stop();
+        enemyTimer->stop();
+    }else
+    {
+        CheckCollisions();
+        player.Update();
+
+        for (unsigned int i=0; i< bullets.size(); i++)
+        {
+            bullets[i].Update();
+        }
     }
 }
 
@@ -113,16 +162,40 @@ void Game::CheckCollisions()
         }
     }
 
+    for (unsigned int j=0; j < enemies.size(); j++)
+    {
+        if (collisionDetect.RectCollsion(player.rect, enemies[j].rect))
+        {
+            enemies.clear();
+            player.Alive = false;
+            enemyTimer->stop();
+            fpsTimer->stop();
+            break;
+        }
+    }
+
 }
 
 void Game::Draw(QPainter *p, QBrush *brush)
 {
-
-    brush->setColor(QColor(0, 0, 255));
+    brush->setColor(QColor(0, 0, 0));
     p->setBrush(*brush);
-    p->drawRect(player.rect);
+    p->drawRect(*backgroundRect);
 
-    brush->setColor(QColor(255,0,0));
+    if (player.Alive)
+    {
+        brush->setColor(QColor(0, 255, 0));
+        p->setBrush(*brush);
+        p->drawRect(player.rect);
+    }else
+    {
+        brush->setColor(QColor(0, 0, 0));
+        p->setBrush(*brush);
+        p->drawRect(player.rect);
+    }
+
+
+    brush->setColor(QColor(255, 255, 255));
     p->setBrush(*brush);
 
     for (unsigned int i=0; i<enemies.size(); i++)
@@ -140,11 +213,55 @@ void Game::Draw(QPainter *p, QBrush *brush)
 
 void Game::UpdateEnemyLoc()
 {
+    if (enemy_dir == RIGHT && movement_flag == false)
+    {
+        enemy_dir = DOWN;
+        previous_enemy_dir = RIGHT;
+        movement_flag = true;
+    }
+    else if (enemy_dir == LEFT && movement_flag == false)
+    {
+        enemy_dir = DOWN;
+        previous_enemy_dir = LEFT;
+        movement_flag = true;
+    }
+    else if (enemy_dir == DOWN && previous_enemy_dir == RIGHT && movement_flag == false)
+    {
+        enemy_dir = LEFT;
+        previous_enemy_dir = DOWN;
+        movement_flag = true;
+    }
+    else if (enemy_dir == DOWN && previous_enemy_dir == LEFT &&movement_flag == false)
+    {
+        enemy_dir = RIGHT;
+        previous_enemy_dir = DOWN;
+        movement_flag = true;
+    }
+
     for (unsigned int i=0; i<enemies.size(); i++)
     {
         int x = enemies[i].rect.x();
         int y = enemies[i].rect.y();
-        enemies[i].SetRect(QRect(x+20, y, 20, 20));
+        if (enemy_dir == RIGHT)
+        {
+            enemies[i].SetRect(QRect(x+20, y, 20, 20));
+            if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-20))
+            {
+                movement_flag = false;
+            }
+        }else if (enemy_dir == LEFT)
+        {
+            enemies[i].SetRect(QRect(x-20, y, 20, 20));
+            if (enemies[i].rect.x() <= (0+20))
+            {
+                movement_flag = false;
+            }
+        }else if (enemy_dir == DOWN)
+        {
+            enemies[i].SetRect(QRect(x, y+20, 20, 20));
+            movement_flag = false;
+        }
+
     }
 
     enemyTimer->start();
@@ -164,6 +281,8 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
 
         switch(event->key()) {
         case Qt::Key_Escape:
+            EnemySpeed -= (EnemySpeed/10);
+            Init();
             break;
         case Qt::Key_W:
             break;

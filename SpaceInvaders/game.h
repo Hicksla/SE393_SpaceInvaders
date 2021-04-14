@@ -12,6 +12,7 @@
 #include "collisiondetector.h"
 
 enum KeyActionType {PRESS, RELEASE};
+enum Enemy_Movement {LEFT, RIGHT, DOWN};
 
 class Game : public QObject
 {
@@ -26,11 +27,21 @@ public:
     void SetCanShoot();
 
     void KeyBoardInput(QKeyEvent *key, KeyActionType action);
+    void AddFpsTimer(QTimer *timer);
 
+
+
+private:
+    void loadPlayer();
+    void loadEnemies();
+    void unloadEnemies();
+
+private:
+    QTimer *fpsTimer;
     QTimer *timer = new QTimer;
     QTimer *enemyTimer = new QTimer;
 
-private:
+    QRect *backgroundRect = new QRect(0, 0, 800, 600);
 
     CollisionDetector collisionDetect;
 
@@ -38,6 +49,10 @@ private:
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
 
+    int EnemySpeed = 100;
+    Enemy_Movement enemy_dir = RIGHT;
+    Enemy_Movement previous_enemy_dir = RIGHT;
+    bool movement_flag = true;
     bool ShootTimeOut = true;
 
 };

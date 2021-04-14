@@ -30,11 +30,11 @@ void Player::ClearMovement()
 void Player::SetMovingRight()
 {
     movingRight = true;
-    xVel = 5;
+    xVel = 2;
 }
 
 void Player::SetMovingLeft()
 {
     movingLeft = true;
-    xVel = -5;
+    xVel = -2;
 }

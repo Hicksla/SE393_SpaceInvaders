@@ -21,6 +21,8 @@ public:
     int w = 25;
     int h = 25;
 
+    int Alive = true;
+
     QRect rect;
 
     bool movingLeft = false;
