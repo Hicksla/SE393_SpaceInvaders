@@ -34,13 +34,13 @@ void Game::loadEnemies()
 {
     for (int i=0; i < 5; i++)
     {
-        for (int j=0; j < 13; j++)
+        for (int j=0; j < 11; j++)
         {
             Enemy newEnemey(i);
             if (i == 0){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(150, 80, 20, 20));
+                    newEnemey.SetRect(QRect(200, 80, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
@@ -53,7 +53,7 @@ void Game::loadEnemies()
             else if (i == 1){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(150, 120, 20, 20));
+                    newEnemey.SetRect(QRect(200, 120, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
@@ -67,7 +67,7 @@ void Game::loadEnemies()
             else if (i == 2){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(150, 160, 20, 20));
+                    newEnemey.SetRect(QRect(200, 160, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
@@ -81,7 +81,7 @@ void Game::loadEnemies()
             else if (i == 3){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(150, 200, 20, 20));
+                    newEnemey.SetRect(QRect(200, 200, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
@@ -94,7 +94,7 @@ void Game::loadEnemies()
             else if (i == 4){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(150, 240, 20, 20));
+                    newEnemey.SetRect(QRect(200, 240, 20, 20));
                     enemies.push_back(newEnemey);
                 }
                 else
@@ -199,7 +199,6 @@ void Game::CheckCollisions()
     {
         if (collisionDetect.RectCollsion(player.rect, enemies[j].rect))
         {
-            enemies.clear();
             player.Alive = false;
             PauseGame();
             break;
