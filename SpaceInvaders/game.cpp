@@ -6,6 +6,9 @@ Game::Game()
     Init();
     connect(timer, &QTimer::timeout, this, &Game::SetCanShoot);
     timer->setInterval(500);
+
+    connect(enemyTimer, &QTimer::timeout, this, &Game::UpdateEnemyLoc);
+    enemyTimer->setInterval(1000);
 }
 
 void Game::Init()
@@ -17,7 +20,7 @@ void Game::Init()
     {
         for (int j=0; j < 13; j++)
         {
-            Enemy newEnemey;
+            Enemy newEnemey(i);
             if (i == 0){
                 if (j==0)
                 {
@@ -74,7 +77,7 @@ void Game::Init()
             }
         }
     }
-
+    enemyTimer->start();
 }
 
 void Game::Update()
@@ -133,6 +136,18 @@ void Game::Draw(QPainter *p, QBrush *brush)
     {
         p->drawEllipse(bullets[i].circle);
     }
+}
+
+void Game::UpdateEnemyLoc()
+{
+    for (unsigned int i=0; i<enemies.size(); i++)
+    {
+        int x = enemies[i].rect.x();
+        int y = enemies[i].rect.y();
+        enemies[i].SetRect(QRect(x+20, y, 20, 20));
+    }
+
+    enemyTimer->start();
 }
 
 void Game::SetCanShoot()

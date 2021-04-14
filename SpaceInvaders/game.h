@@ -22,12 +22,13 @@ public:
     void Update();
     void Draw(QPainter *p, QBrush *brush);
     void CheckCollisions();
-
+    void UpdateEnemyLoc();
     void SetCanShoot();
 
     void KeyBoardInput(QKeyEvent *key, KeyActionType action);
 
     QTimer *timer = new QTimer;
+    QTimer *enemyTimer = new QTimer;
 
 private:
 

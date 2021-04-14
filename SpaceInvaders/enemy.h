@@ -8,11 +8,12 @@ enum enemy_type {EASY, MEDIUM, HARD, VERY_HARD};
 class Enemy
 {
 public:
-    Enemy();
+    Enemy(int RowLevel);
 
     void SetRect(QRect Rect);
 
     enemy_type type;
+    int rowLevel;
     QRect rect;
 };
 
