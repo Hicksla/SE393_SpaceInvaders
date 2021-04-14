@@ -12,6 +12,8 @@ public:
 
     void SetRect(QRect Rect);
 
+    bool Shoot(float time, float odds, int deltaTime);
+
     enemy_type type;
     int rowLevel;
     QRect rect;

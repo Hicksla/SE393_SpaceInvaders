@@ -24,7 +24,9 @@ public:
     void Draw(QPainter *p, QBrush *brush);
     void CheckCollisions();
     void UpdateEnemyLoc();
+    void GenEnemyBullets();
     void SetCanShoot();
+    void PauseGame();
 
     void KeyBoardInput(QKeyEvent *key, KeyActionType action);
     void AddFpsTimer(QTimer *timer);
@@ -48,8 +50,9 @@ private:
     Player player = Player(400, 500);
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
+    std::vector<Bullet> enemyBullets;
 
-    int EnemySpeed = 100;
+    int EnemySpeed = 1000;
     Enemy_Movement enemy_dir = RIGHT;
     Enemy_Movement previous_enemy_dir = RIGHT;
     bool movement_flag = true;

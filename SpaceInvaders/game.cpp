@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <ctime>
 
 Game::Game()
 {
@@ -14,6 +15,12 @@ void Game::AddFpsTimer(QTimer *timer)
 {
     fpsTimer = timer;
     Init();
+}
+
+void Game::PauseGame()
+{
+    enemyTimer->stop();
+    fpsTimer->stop();
 }
 
 void Game::loadPlayer()
@@ -105,10 +112,13 @@ void Game::unloadEnemies()
 {
     enemies.clear();
     bullets.clear();
+    enemyBullets.clear();
 }
 
 void Game::Init()
 {
+
+    unloadEnemies();
 
     if (!player.Alive)
     {
@@ -126,8 +136,7 @@ void Game::Update()
 {
     if (enemies.size() <= 0)
     {
-        fpsTimer->stop();
-        enemyTimer->stop();
+        PauseGame();
     }else
     {
         CheckCollisions();
@@ -136,6 +145,11 @@ void Game::Update()
         for (unsigned int i=0; i< bullets.size(); i++)
         {
             bullets[i].Update();
+        }
+
+        for (unsigned int i=0; i< enemyBullets.size(); i++)
+        {
+            enemyBullets[i].Update();
         }
     }
 }
@@ -147,6 +161,14 @@ void Game::CheckCollisions()
         if (bullets[i].circle.y() <= 0)
         {
             bullets.erase(bullets.begin() + i);
+        }
+    }
+
+    for (unsigned int i=0; i<enemyBullets.size(); i++)
+    {
+        if (enemyBullets[i].circle.y() >= 600)
+        {
+            enemyBullets.erase(enemyBullets.begin() + i);
         }
     }
 
@@ -162,14 +184,24 @@ void Game::CheckCollisions()
         }
     }
 
+    for (unsigned int i=0; i<enemyBullets.size(); i++)
+    {
+        if (collisionDetect.RectCollsion(enemyBullets[i].circle, player.rect))
+        {
+            enemyBullets.erase(enemyBullets.begin() + i);
+            player.Alive = false;
+            PauseGame();
+        }
+    }
+
+
     for (unsigned int j=0; j < enemies.size(); j++)
     {
         if (collisionDetect.RectCollsion(player.rect, enemies[j].rect))
         {
             enemies.clear();
             player.Alive = false;
-            enemyTimer->stop();
-            fpsTimer->stop();
+            PauseGame();
             break;
         }
     }
@@ -208,6 +240,31 @@ void Game::Draw(QPainter *p, QBrush *brush)
     for (unsigned int i=0; i< bullets.size(); i++)
     {
         p->drawEllipse(bullets[i].circle);
+    }
+
+    brush->setColor(QColor(255,0,0));
+    p->setBrush(*brush);
+    for (unsigned int i=0; i< enemyBullets.size(); i++)
+    {
+        p->drawEllipse(enemyBullets[i].circle);
+    }
+}
+
+void Game::GenEnemyBullets()
+{
+    srand(time(0));
+
+    unsigned int r;
+    unsigned int eSize = enemies.size();
+    for (unsigned int i=0; i<eSize; i++)
+    {
+       r = rand() % eSize*12;
+
+       if (r < eSize)
+       {
+           Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 10, -2);
+           enemyBullets.push_back(b);
+       }
     }
 }
 
@@ -264,6 +321,7 @@ void Game::UpdateEnemyLoc()
 
     }
 
+    GenEnemyBullets();
     enemyTimer->start();
 }
 
@@ -305,7 +363,7 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
         case Qt::Key_Space:
             if (ShootTimeOut)
             {
-               bullets.push_back(Bullet(player.x + ((player.w/2)-5), player.y));
+               bullets.push_back(Bullet(player.x + ((player.w/2)-5), player.y, 10, 10));
                ShootTimeOut = false;
                timer->start();
             }

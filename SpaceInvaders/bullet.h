@@ -6,14 +6,14 @@
 class Bullet
 {
 public:
-    Bullet(int x, int y);
+    Bullet(int X, int Y, int Width, int YVel);
 
     void Update();
 
     int x;
     int y;
-    int width = 10;
-    int yVel = 7;
+    int width;
+    int yVel;
 
     QRect circle;
 };
