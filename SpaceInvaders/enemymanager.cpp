@@ -155,7 +155,7 @@ void EnemyManager::GenEnemyBullets()
     unsigned int eSize = enemies.size();
     for (unsigned int i=0; i<eSize; i++)
     {
-       r = rand() % eSize*12;
+       r = rand() % eSize*shootOdds;
 
        if (r < eSize)
        {
@@ -174,4 +174,13 @@ void EnemyManager::Start()
 {
     arrayMovementTimer->setInterval(arrayMovementInterval);
     arrayMovementTimer->start();
+}
+
+void EnemyManager::IncreaseLevel()
+{
+    Pause();
+    arrayMovementInterval -= (arrayMovementInterval/5);
+    shootOdds--;
+    loadEnemies();
+    Start();
 }

@@ -12,6 +12,13 @@ void Game::AddFpsTimer(QTimer *timer)
     Init();
 }
 
+void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
+{
+    scoreLcd = scoreUi;
+    livesLcd = livesUi;
+    levelLcd = levelUi;
+}
+
 void Game::PauseGame()
 {
     enemyManger->Pause();
@@ -23,6 +30,10 @@ void Game::Init()
 {
     enemyManger->unloadEnemies();
     playerManager->bullets.clear();
+
+    score = 0;
+    lives = 3;
+    level = 1;
 
     if (!playerManager->player->Alive)
     {
@@ -38,22 +49,27 @@ void Game::Update()
 {
     if (enemyManger->enemies.size() <= 0)
     {
-        PauseGame();
-    }else
-    {
-        CheckCollisions();
-        playerManager->player->Update();
-
-        for (unsigned int i=0; i< playerManager->bullets.size(); i++)
-        {
-            playerManager->bullets[i].Update();
-        }
-
-        for (unsigned int i=0; i< enemyManger->bullets.size(); i++)
-        {
-            enemyManger->bullets[i].Update();
-        }
+        enemyManger->IncreaseLevel();
+        level++;
     }
+
+    CheckCollisions();
+    playerManager->player->Update();
+
+    for (unsigned int i=0; i< playerManager->bullets.size(); i++)
+    {
+        playerManager->bullets[i].Update();
+    }
+
+    for (unsigned int i=0; i< enemyManger->bullets.size(); i++)
+    {
+        enemyManger->bullets[i].Update();
+    }
+
+    scoreLcd->display(score);
+    livesLcd->display(lives);
+    levelLcd->display(level);
+
 }
 
 void Game::CheckCollisions()
@@ -68,6 +84,7 @@ void Game::CheckCollisions()
             {
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
                 playerManager->bullets.erase(playerManager->bullets.begin() + i);
+                score += 10;
             }
         }
     }
@@ -77,8 +94,17 @@ void Game::CheckCollisions()
         if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, playerManager->player->rect))
         {
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
-            playerManager->player->Alive = false;
-            PauseGame();
+            lives--;
+            if (lives > 0)
+            {
+                playerManager->player = new Player();
+            }else
+            {
+               playerManager->player->Alive = false;
+               lives = 0;
+               livesLcd->display(0);
+               PauseGame();
+            }
         }
     }
 
@@ -87,8 +113,15 @@ void Game::CheckCollisions()
     {
         if (collisionDetect.RectCollsion(playerManager->player->rect, enemyManger->enemies[j].rect))
         {
-            playerManager->player->Alive = false;
-            PauseGame();
+            lives--;
+            if (lives > 0)
+            {
+                playerManager->player = new Player();
+            }else
+            {
+               playerManager->player->Alive = false;
+               PauseGame();
+            }
             break;
         }
     }

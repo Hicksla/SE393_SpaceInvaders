@@ -23,12 +23,15 @@ public:
     void GenEnemyBullets();
     void Pause();
     void Start();
+    void IncreaseLevel();
 
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
 private:
     QTimer *arrayMovementTimer = new QTimer;
     int arrayMovementInterval = 1000; // in ms
+
+    int shootOdds = 12;
 
     //Handles Memory for moving enemy array correctly
     Enemy_Movement enemy_dir = RIGHT;
