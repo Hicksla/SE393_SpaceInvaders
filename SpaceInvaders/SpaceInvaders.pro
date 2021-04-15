@@ -23,7 +23,8 @@ SOURCES += \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
-    player.cpp
+    player.cpp \
+    playermanager.cpp
 
 HEADERS += \
     bullet.h \
@@ -32,7 +33,8 @@ HEADERS += \
     enemymanager.h \
     game.h \
     mainwindow.h \
-    player.h
+    player.h \
+    playermanager.h
 
 FORMS += \
     mainwindow.ui

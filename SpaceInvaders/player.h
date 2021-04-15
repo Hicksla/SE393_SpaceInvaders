@@ -6,13 +6,14 @@
 class Player
 {
 public:
-    Player(int X, int Y);
+    Player();
 
     void Update();
 
     void ClearMovement();
     void SetMovingRight();
     void SetMovingLeft();
+    void SetPlayerPosition(int x, int y);
 
 public:
     int x;
@@ -25,10 +26,10 @@ public:
 
     QRect rect;
 
+private:
     bool movingLeft = false;
     bool movingRight = false;
 
-private:
 
 };
 

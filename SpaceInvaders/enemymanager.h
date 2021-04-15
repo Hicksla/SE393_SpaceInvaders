@@ -30,6 +30,7 @@ private:
     QTimer *arrayMovementTimer = new QTimer;
     int arrayMovementInterval = 1000; // in ms
 
+    //Handles Memory for moving enemy array correctly
     Enemy_Movement enemy_dir = RIGHT;
     Enemy_Movement previous_enemy_dir = RIGHT;
     bool movement_flag = true;

@@ -1,9 +1,9 @@
 #include "player.h"
 
-Player::Player(int X, int Y)
+Player::Player()
 {
-    x=X;
-    y=Y;
+    x=390;
+    y=540;
 
     rect = QRect(x, y, w, h);
 }
@@ -18,6 +18,14 @@ void Player::Update()
        x += xVel;
     }
     rect.setRect(x, y, w, h);
+}
+
+void Player::SetPlayerPosition(int X, int Y)
+{
+    x=X;
+    y=Y;
+
+    rect = QRect(x, y, w, h);
 }
 
 void Player::ClearMovement()

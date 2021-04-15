@@ -4,11 +4,7 @@
 
 Game::Game()
 {
-    connect(timer, &QTimer::timeout, this, &Game::SetCanShoot);
-    timer->setInterval(500);
-
     collisionDetect = CollisionDetector();
-
 }
 void Game::AddFpsTimer(QTimer *timer)
 {
@@ -22,21 +18,15 @@ void Game::PauseGame()
     fpsTimer->stop();
 }
 
-void Game::loadPlayer()
-{
-    player = Player(400, 500);
-    player.Alive = true;
-
-}
-
 
 void Game::Init()
 {
     enemyManger->unloadEnemies();
+    playerManager->bullets.clear();
 
-    if (!player.Alive)
+    if (!playerManager->player->Alive)
     {
-        loadPlayer();
+        playerManager->LoadPlayer();
     }
 
     enemyManger->loadEnemies();
@@ -52,11 +42,11 @@ void Game::Update()
     }else
     {
         CheckCollisions();
-        player.Update();
+        playerManager->player->Update();
 
-        for (unsigned int i=0; i< bullets.size(); i++)
+        for (unsigned int i=0; i< playerManager->bullets.size(); i++)
         {
-            bullets[i].Update();
+            playerManager->bullets[i].Update();
         }
 
         for (unsigned int i=0; i< enemyManger->bullets.size(); i++)
@@ -68,11 +58,11 @@ void Game::Update()
 
 void Game::CheckCollisions()
 {
-    for (unsigned int i=0; i<bullets.size(); i++)
+    for (unsigned int i=0; i<playerManager->bullets.size(); i++)
     {
-        if (bullets[i].circle.y() <= 0)
+        if (playerManager->bullets[i].circle.y() <= 0)
         {
-            bullets.erase(bullets.begin() + i);
+           playerManager->bullets.erase(playerManager->bullets.begin() + i);
         }
     }
 
@@ -84,24 +74,24 @@ void Game::CheckCollisions()
         }
     }
 
-    for (unsigned int i=0; i<bullets.size(); i++)
+    for (unsigned int i=0; i<playerManager->bullets.size(); i++)
     {
         for (unsigned int j=0; j < enemyManger->enemies.size(); j++)
         {
-            if (collisionDetect.RectCollsion(bullets[i].circle, enemyManger->enemies[j].rect))
+            if (collisionDetect.RectCollsion(playerManager->bullets[i].circle, enemyManger->enemies[j].rect))
             {
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
-                bullets.erase(bullets.begin() + i);
+                playerManager->bullets.erase(playerManager->bullets.begin() + i);
             }
         }
     }
 
     for (unsigned int i=0; i<enemyManger->bullets.size(); i++)
     {
-        if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, player.rect))
+        if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, playerManager->player->rect))
         {
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
-            player.Alive = false;
+            playerManager->player->Alive = false;
             PauseGame();
         }
     }
@@ -109,9 +99,9 @@ void Game::CheckCollisions()
 
     for (unsigned int j=0; j < enemyManger->enemies.size(); j++)
     {
-        if (collisionDetect.RectCollsion(player.rect, enemyManger->enemies[j].rect))
+        if (collisionDetect.RectCollsion(playerManager->player->rect, enemyManger->enemies[j].rect))
         {
-            player.Alive = false;
+            playerManager->player->Alive = false;
             PauseGame();
             break;
         }
@@ -125,16 +115,16 @@ void Game::Draw(QPainter *p, QBrush *brush)
     p->setBrush(*brush);
     p->drawRect(*backgroundRect);
 
-    if (player.Alive)
+    if (playerManager->player->Alive)
     {
         brush->setColor(QColor(0, 255, 0));
         p->setBrush(*brush);
-        p->drawRect(player.rect);
+        p->drawRect(playerManager->player->rect);
     }else
     {
         brush->setColor(QColor(0, 0, 0));
         p->setBrush(*brush);
-        p->drawRect(player.rect);
+        p->drawRect(playerManager->player->rect);
     }
 
 
@@ -148,9 +138,9 @@ void Game::Draw(QPainter *p, QBrush *brush)
 
     brush->setColor(QColor(255,69,0));
     p->setBrush(*brush);
-    for (unsigned int i=0; i< bullets.size(); i++)
+    for (unsigned int i=0; i< playerManager->bullets.size(); i++)
     {
-        p->drawEllipse(bullets[i].circle);
+        p->drawEllipse(playerManager->bullets[i].circle);
     }
 
     brush->setColor(QColor(255,0,0));
@@ -159,11 +149,6 @@ void Game::Draw(QPainter *p, QBrush *brush)
     {
         p->drawEllipse(enemyManger->bullets[i].circle);
     }
-}
-
-void Game::SetCanShoot()
-{
-    ShootTimeOut = true;
 }
 
 void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
@@ -175,6 +160,7 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
 
         switch(event->key()) {
         case Qt::Key_Escape:
+            playerManager->player->SetPlayerPosition(390, 550);
             Init();
             break;
         case Qt::Key_W:
@@ -190,19 +176,13 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
         case Qt::Key_Down:
             break;
         case Qt::Key_Left:
-            player.SetMovingLeft();
+            playerManager->player->SetMovingLeft();
             break;
         case Qt::Key_Right:
-            player.SetMovingRight();
+            playerManager->player->SetMovingRight();
             break;
         case Qt::Key_Space:
-            if (ShootTimeOut)
-            {
-               bullets.push_back(Bullet(player.x + ((player.w/2)-5), player.y, 10, 10));
-               ShootTimeOut = false;
-               timer->start();
-            }
-
+            playerManager->Shoot();
             break;
         }
     }
@@ -227,10 +207,10 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
         case Qt::Key_Down:
             break;
         case Qt::Key_Left:
-            player.ClearMovement();
+            playerManager->player->ClearMovement();
             break;
         case Qt::Key_Right:
-            player.ClearMovement();
+            playerManager->player->ClearMovement();
             break;
         case Qt::Key_Space:
             break;
