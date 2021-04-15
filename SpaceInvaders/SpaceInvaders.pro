@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,17 +19,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     bullet.cpp \
     collisiondetector.cpp \
+    enemy.cpp \
+    enemymanager.cpp \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
-    player.cpp
+    player.cpp \
+    playermanager.cpp
 
 HEADERS += \
     bullet.h \
     collisiondetector.h \
+    enemy.h \
+    enemymanager.h \
     game.h \
     mainwindow.h \
-    player.h
+    player.h \
+    playermanager.h
 
 FORMS += \
     mainwindow.ui
@@ -37,3 +44,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Bacteria.qrc \
+    RedBloodCell.qrc \
+    Virus1.qrc \
+    Virus2.qrc \
+    WhiteBloodCell.qrc

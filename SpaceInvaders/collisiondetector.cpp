@@ -19,3 +19,22 @@ bool CollisionDetector::RectCollsion(QRect R1, QRect R2)
 
 
 }
+
+void CollisionDetector::CheckBulletCollisions(std::vector<Bullet> &EnemyBullets, std::vector<Bullet> &PlayerBullets)
+{
+    for (unsigned int i=0; i<PlayerBullets.size(); i++)
+    {
+        if (PlayerBullets[i].circle.y() <= 0)
+        {
+           PlayerBullets.erase(PlayerBullets.begin() + i);
+        }
+    }
+
+    for (unsigned int i=0; i<EnemyBullets.size(); i++)
+    {
+        if (EnemyBullets[i].circle.y() >= 600)
+        {
+            EnemyBullets.erase(EnemyBullets.begin() + i);
+        }
+    }
+}

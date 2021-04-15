@@ -6,27 +6,30 @@
 class Player
 {
 public:
-    Player(int X, int Y);
+    Player();
 
     void Update();
 
     void ClearMovement();
     void SetMovingRight();
     void SetMovingLeft();
+    void SetPlayerPosition(int x, int y);
 
 public:
     int x;
     int y;
     int xVel = 0;
-    int w = 25;
-    int h = 25;
+    int w = 35;
+    int h = 35;
+
+    int Alive = true;
 
     QRect rect;
 
+private:
     bool movingLeft = false;
     bool movingRight = false;
 
-private:
 
 };
 
