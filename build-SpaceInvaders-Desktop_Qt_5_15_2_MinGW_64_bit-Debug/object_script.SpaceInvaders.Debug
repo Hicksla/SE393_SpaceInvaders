@@ -1,0 +1,10 @@
+debug/bullet.o
+debug/collisiondetector.o
+debug/enemy.o
+debug/enemymanager.o
+debug/game.o
+debug/main.o
+debug/mainwindow.o
+debug/player.o
+debug/playermanager.o
+debug/moc_mainwindow.o

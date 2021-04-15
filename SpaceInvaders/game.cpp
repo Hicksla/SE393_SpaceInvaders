@@ -58,21 +58,7 @@ void Game::Update()
 
 void Game::CheckCollisions()
 {
-    for (unsigned int i=0; i<playerManager->bullets.size(); i++)
-    {
-        if (playerManager->bullets[i].circle.y() <= 0)
-        {
-           playerManager->bullets.erase(playerManager->bullets.begin() + i);
-        }
-    }
-
-    for (unsigned int i=0; i<enemyManger->bullets.size(); i++)
-    {
-        if (enemyManger->bullets[i].circle.y() >= 600)
-        {
-            enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
-        }
-    }
+    collisionDetect.CheckBulletCollisions(enemyManger->bullets, playerManager->bullets);
 
     for (unsigned int i=0; i<playerManager->bullets.size(); i++)
     {
