@@ -19,6 +19,7 @@ SOURCES += \
     bullet.cpp \
     collisiondetector.cpp \
     enemy.cpp \
+    enemymanager.cpp \
     game.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     bullet.h \
     collisiondetector.h \
     enemy.h \
+    enemymanager.h \
     game.h \
     mainwindow.h \
     player.h
