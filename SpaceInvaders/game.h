@@ -5,6 +5,9 @@
 #include <QKeyEvent>
 #include <vector>
 #include <QTimer>
+#include <QTcpSocket>
+#include <QHostAddress>
+#include <QDebug>
 
 #include "player.h"
 #include "bullet.h"
@@ -36,7 +39,25 @@ private:
     std::vector<QRect> enemies1; //need to make types of enemies
     std::vector<Bullet> bullets;
 
+
+
     bool ShootTimeOut = true;
+
+
+    void ConnectToServer(QHostAddress address, int port);
+    void SendData(QString data);
+    void ReadData();
+    void JoinGame(QString gameStr);
+
+    QTcpSocket clientSocket;
+    QString gameString = "waitingList";
+    QString connectLevel = "";
+
+    QTimer *netReadTimer = new QTimer;
+
+    Player altPlayer = Player(200,500);
+    std::vector<Bullet> altBullets;
+    bool altShootTimeOut = true;
 
 };
 
