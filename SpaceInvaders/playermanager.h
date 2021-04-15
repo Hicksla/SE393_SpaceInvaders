@@ -15,7 +15,7 @@ public:
     PlayerManager();
     void LoadPlayer();
     void LoadPlayers();
-    void Shoot();
+    bool Shoot();
 
     void SetPlayerCanShoot();
 

@@ -238,8 +238,10 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
             SendData("r_1");
             break;
         case Qt::Key_Space:
-            playerManager->Shoot();
-            SendData("a_0_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
+            if(playerManager->Shoot())
+            {
+                SendData("a_0_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
+            }
             break;
         }
     }

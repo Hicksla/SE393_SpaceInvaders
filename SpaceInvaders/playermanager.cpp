@@ -25,12 +25,14 @@ void PlayerManager::SetPlayerCanShoot()
     shootTimeOut = true;
 }
 
-void PlayerManager::Shoot()
+bool PlayerManager::Shoot()
 {
     if (shootTimeOut)
     {
        bullets.push_back(Bullet(player->x + ((player->w/2)-5), player->y, 10, 10));
        shootTimeOut = false;
        shootTimer->start();
+       return true;
     }
+    return false;
 }
