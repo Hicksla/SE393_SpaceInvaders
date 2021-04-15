@@ -19,8 +19,8 @@ public:
     int x;
     int y;
     int xVel = 0;
-    int w = 25;
-    int h = 25;
+    int w = 35;
+    int h = 35;
 
     int Alive = true;
 

@@ -56,6 +56,7 @@ void Game::Update()
     {
         enemyManger->IncreaseLevel();
         level++;
+        lives++;
     }
 
     CheckCollisions();
