@@ -7,4 +7,9 @@ debug/main.o
 debug/mainwindow.o
 debug/player.o
 debug/playermanager.o
+debug/qrc_Bacteria.o
+debug/qrc_RedBloodCell.o
+debug/qrc_Virus1.o
+debug/qrc_Virus2.o
+debug/qrc_WhiteBloodCell.o
 debug/moc_mainwindow.o

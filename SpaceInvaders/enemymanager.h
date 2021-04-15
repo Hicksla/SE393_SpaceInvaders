@@ -27,11 +27,15 @@ public:
 
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
+
+    int enemiesKilled = 0;
 private:
     QTimer *arrayMovementTimer = new QTimer;
     int arrayMovementInterval = 1000; // in ms
+    QTimer *shootTimer = new QTimer;
 
     int shootOdds = 12;
+    int width = 30;
 
     //Handles Memory for moving enemy array correctly
     Enemy_Movement enemy_dir = RIGHT;

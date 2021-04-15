@@ -223,6 +223,7 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro ../../../Qt/5.15.2/mingw81_64/mkspe
 		../../../Qt/5.15.2/mingw81_64/mkspecs/features/qt_config.prf \
 		../../../Qt/5.15.2/mingw81_64/mkspecs/win32-g++/qmake.conf \
 		../../../Qt/5.15.2/mingw81_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt/5.15.2/mingw81_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/5.15.2/mingw81_64/mkspecs/features/toolchain.prf \
 		../../../Qt/5.15.2/mingw81_64/mkspecs/features/default_pre.prf \
@@ -251,8 +252,12 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro ../../../Qt/5.15.2/mingw81_64/mkspe
 		../../../Qt/5.15.2/mingw81_64/lib/Qt5Gui.prl \
 		../../../Qt/5.15.2/mingw81_64/lib/Qt5Core.prl \
 		../../../Qt/5.15.2/mingw81_64/lib/qtmain.prl \
-		.qmake.stash \
-		../../../Qt/5.15.2/mingw81_64/mkspecs/features/build_pass.prf
+		../../../Qt/5.15.2/mingw81_64/mkspecs/features/build_pass.prf \
+		../SpaceInvaders/Bacteria.qrc \
+		../SpaceInvaders/RedBloodCell.qrc \
+		../SpaceInvaders/Virus1.qrc \
+		../SpaceInvaders/Virus2.qrc \
+		../SpaceInvaders/WhiteBloodCell.qrc
 	$(QMAKE) -o Makefile ..\SpaceInvaders\SpaceInvaders.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/spec_pre.prf:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/qdevice.pri:
@@ -407,6 +412,7 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro ../../../Qt/5.15.2/mingw81_64/mkspe
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/qt_config.prf:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/win32-g++/qmake.conf:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/exclusive_builds.prf:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/toolchain.prf:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/default_pre.prf:
@@ -435,8 +441,12 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro ../../../Qt/5.15.2/mingw81_64/mkspe
 ../../../Qt/5.15.2/mingw81_64/lib/Qt5Gui.prl:
 ../../../Qt/5.15.2/mingw81_64/lib/Qt5Core.prl:
 ../../../Qt/5.15.2/mingw81_64/lib/qtmain.prl:
-.qmake.stash:
 ../../../Qt/5.15.2/mingw81_64/mkspecs/features/build_pass.prf:
+../SpaceInvaders/Bacteria.qrc:
+../SpaceInvaders/RedBloodCell.qrc:
+../SpaceInvaders/Virus1.qrc:
+../SpaceInvaders/Virus2.qrc:
+../SpaceInvaders/WhiteBloodCell.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\SpaceInvaders\SpaceInvaders.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 

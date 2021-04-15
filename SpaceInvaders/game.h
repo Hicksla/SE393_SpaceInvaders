@@ -6,6 +6,7 @@
 #include <vector>
 #include <QTimer>
 #include <QLCDNumber>
+#include <QImage>
 
 #include "collisiondetector.h"
 #include "enemymanager.h"
@@ -37,6 +38,12 @@ private:
     int score = 0;
     int lives = 3;
     int level = 1;
+
+    QImage *virus1 = new QImage;
+    QImage *virus2 = new QImage;
+    QImage *bacteria = new QImage;
+    QImage *whiteBloodCell = new QImage;
+
 
     QRect *backgroundRect = new QRect(0, 0, 800, 600);
 

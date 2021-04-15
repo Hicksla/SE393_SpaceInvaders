@@ -43,3 +43,10 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Bacteria.qrc \
+    RedBloodCell.qrc \
+    Virus1.qrc \
+    Virus2.qrc \
+    WhiteBloodCell.qrc

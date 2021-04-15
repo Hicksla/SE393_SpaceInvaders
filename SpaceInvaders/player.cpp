@@ -3,7 +3,7 @@
 Player::Player()
 {
     x=390;
-    y=540;
+    y=550;
 
     rect = QRect(x, y, w, h);
 }

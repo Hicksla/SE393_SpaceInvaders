@@ -8,6 +8,11 @@ Game::Game()
 }
 void Game::AddFpsTimer(QTimer *timer)
 {
+    virus1->load(":/images/virus1.png");
+    virus2->load(":/images/virus2.png");
+    bacteria->load(":/images/bacteria.png");
+    whiteBloodCell->load(":/images/whitebloodcell.png");
+
     fpsTimer = timer;
     Init();
 }
@@ -82,9 +87,26 @@ void Game::CheckCollisions()
         {
             if (collisionDetect.RectCollsion(playerManager->bullets[i].circle, enemyManger->enemies[j].rect))
             {
+                switch (enemyManger->enemies[j].rowLevel) {
+                case 0:
+                    score += 40;
+                    break;
+                case 1:
+                    score += 20;
+                    break;
+                case 2:
+                    score += 20;
+                    break;
+                case 3:
+                    score += 10;
+                    break;
+                case 4:
+                    score += 10;
+                    break;
+                }
+
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
                 playerManager->bullets.erase(playerManager->bullets.begin() + i);
-                score += 10;
             }
         }
     }
@@ -113,15 +135,7 @@ void Game::CheckCollisions()
     {
         if (collisionDetect.RectCollsion(playerManager->player->rect, enemyManger->enemies[j].rect))
         {
-            lives--;
-            if (lives > 0)
-            {
-                playerManager->player = new Player();
-            }else
-            {
-               playerManager->player->Alive = false;
-               PauseGame();
-            }
+            PauseGame();
             break;
         }
     }
@@ -138,7 +152,7 @@ void Game::Draw(QPainter *p, QBrush *brush)
     {
         brush->setColor(QColor(0, 255, 0));
         p->setBrush(*brush);
-        p->drawRect(playerManager->player->rect);
+        p->drawImage(playerManager->player->rect, *whiteBloodCell);
     }else
     {
         brush->setColor(QColor(0, 0, 0));
@@ -147,12 +161,25 @@ void Game::Draw(QPainter *p, QBrush *brush)
     }
 
 
-    brush->setColor(QColor(255, 255, 255));
-    p->setBrush(*brush);
-
     for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
     {
-        p->drawRect(enemyManger->enemies[i].rect);
+        switch (enemyManger->enemies[i].rowLevel) {
+        case 0:
+            p->drawImage(enemyManger->enemies[i].rect, *virus1);
+            break;
+        case 1:
+            p->drawImage(enemyManger->enemies[i].rect, *virus2);
+            break;
+        case 2:
+            p->drawImage(enemyManger->enemies[i].rect, *virus2);
+            break;
+        case 3:
+            p->drawImage(enemyManger->enemies[i].rect, *bacteria);
+            break;
+        case 4:
+            p->drawImage(enemyManger->enemies[i].rect, *bacteria);
+            break;
+        }
     }
 
     brush->setColor(QColor(255,69,0));
