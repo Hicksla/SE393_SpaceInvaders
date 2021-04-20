@@ -35,6 +35,7 @@ void Game::Init()
 {
     enemyManger->unloadEnemies();
     playerManager->bullets.clear();
+    ClearBarriers();
 
     score = 0;
     lives = 3;
@@ -46,6 +47,7 @@ void Game::Init()
     }
 
     enemyManger->loadEnemies();
+    BuildBarriers();
     fpsTimer->start();
     enemyManger->Start();
 }
@@ -55,6 +57,8 @@ void Game::Update()
     if (enemyManger->enemies.size() <= 0)
     {
         enemyManger->IncreaseLevel();
+        ClearBarriers();
+        BuildBarriers();
         level++;
         lives++;
     }
@@ -81,6 +85,30 @@ void Game::Update()
 void Game::CheckCollisions()
 {
     collisionDetect.CheckBulletCollisions(enemyManger->bullets, playerManager->bullets);
+
+    for(unsigned int i=0; i<barriers.size(); i++)
+    {
+        for (unsigned int j=0; j<enemyManger->bullets.size(); j++)
+        {
+            if (collisionDetect.RectCollsion(barriers[i], enemyManger->bullets[j].circle))
+            {
+                enemyManger->bullets.erase(enemyManger->bullets.begin() + j);
+                barriers.erase(barriers.begin() + i);
+            }
+        }
+    }
+
+    for(unsigned int i=0; i<barriers.size(); i++)
+    {
+        for (unsigned int j=0; j<playerManager->bullets.size(); j++)
+        {
+            if (collisionDetect.RectCollsion(barriers[i], playerManager->bullets[j].circle))
+            {
+                playerManager->bullets.erase(playerManager->bullets.begin() + j);
+                barriers.erase(barriers.begin() + i);
+            }
+        }
+    }
 
     for (unsigned int i=0; i<playerManager->bullets.size(); i++)
     {
@@ -131,15 +159,7 @@ void Game::CheckCollisions()
         }
     }
 
-
-    for (unsigned int j=0; j < enemyManger->enemies.size(); j++)
-    {
-        if (collisionDetect.RectCollsion(playerManager->player->rect, enemyManger->enemies[j].rect))
-        {
-            PauseGame();
-            break;
-        }
-    }
+    //Check if enemeies make it to the bottom
 
 }
 
@@ -148,6 +168,10 @@ void Game::Draw(QPainter *p, QBrush *brush)
     brush->setColor(QColor(0, 0, 0));
     p->setBrush(*brush);
     p->drawRect(*backgroundRect);
+
+    brush->setColor(QColor(0, 255, 0));
+    p->setBrush(*brush);
+    p->drawRects(barriers.data(), barriers.size());
 
     if (playerManager->player->Alive)
     {
@@ -196,6 +220,50 @@ void Game::Draw(QPainter *p, QBrush *brush)
     {
         p->drawEllipse(enemyManger->bullets[i].circle);
     }
+}
+
+void Game::BuildBarriers()
+{
+    barriers.push_back(QRect(155, 470, 20, 20));
+    barriers.push_back(QRect(175, 470, 20, 20));
+    barriers.push_back(QRect(195, 470, 20, 20));
+    barriers.push_back(QRect(155, 490, 20, 20));
+    barriers.push_back(QRect(175, 490, 20, 20));
+    barriers.push_back(QRect(195, 490, 20, 20));
+    barriers.push_back(QRect(155, 510, 20, 20));
+    barriers.push_back(QRect(195, 510, 20, 20));
+
+    barriers.push_back(QRect(310, 470, 20, 20));
+    barriers.push_back(QRect(330, 470, 20, 20));
+    barriers.push_back(QRect(350, 470, 20, 20));
+    barriers.push_back(QRect(310, 490, 20, 20));
+    barriers.push_back(QRect(330, 490, 20, 20));
+    barriers.push_back(QRect(350, 490, 20, 20));
+    barriers.push_back(QRect(310, 510, 20, 20));
+    barriers.push_back(QRect(350, 510, 20, 20));
+
+    barriers.push_back(QRect(465, 470, 20, 20));
+    barriers.push_back(QRect(485, 470, 20, 20));
+    barriers.push_back(QRect(505, 470, 20, 20));
+    barriers.push_back(QRect(465, 490, 20, 20));
+    barriers.push_back(QRect(485, 490, 20, 20));
+    barriers.push_back(QRect(505, 490, 20, 20));
+    barriers.push_back(QRect(465, 510, 20, 20));
+    barriers.push_back(QRect(505, 510, 20, 20));
+
+    barriers.push_back(QRect(620, 470, 20, 20));
+    barriers.push_back(QRect(640, 470, 20, 20));
+    barriers.push_back(QRect(660, 470, 20, 20));
+    barriers.push_back(QRect(620, 490, 20, 20));
+    barriers.push_back(QRect(640, 490, 20, 20));
+    barriers.push_back(QRect(660, 490, 20, 20));
+    barriers.push_back(QRect(620, 510, 20, 20));
+    barriers.push_back(QRect(660, 510, 20, 20));
+}
+
+void Game::ClearBarriers()
+{
+    barriers.clear();
 }
 
 void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)

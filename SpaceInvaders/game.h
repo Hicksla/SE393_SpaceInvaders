@@ -29,6 +29,9 @@ public:
     void AddFpsTimer(QTimer *timer);
     void AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi);
 
+    void BuildBarriers();
+    void ClearBarriers();
+
 
 private:
     QTimer *fpsTimer;
@@ -43,6 +46,8 @@ private:
     QImage *virus2 = new QImage;
     QImage *bacteria = new QImage;
     QImage *whiteBloodCell = new QImage;
+
+    std::vector<QRect> barriers;
 
 
     QRect *backgroundRect = new QRect(0, 0, 800, 600);
