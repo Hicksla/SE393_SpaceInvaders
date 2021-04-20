@@ -7,7 +7,7 @@ Game::Game()
     collisionDetect = CollisionDetector();
     ConnectToServer(QHostAddress("127.0.0.1"), 8006);
     connect(netReadTimer, &QTimer::timeout, this, &Game::ReadData);
-    netReadTimer->setInterval(50);
+    netReadTimer->setInterval(25);
 }
 void Game::AddFpsTimer(QTimer *timer)
 {
@@ -60,7 +60,7 @@ void Game::Init()
 
     if (connectLevel == "host") {
         connect(enemySendTimer, &QTimer::timeout, this, &Game::SendEnemies);
-        enemySendTimer->setInterval(200);
+        enemySendTimer->setInterval(500);
         enemySendTimer->start();
     }
 }
@@ -316,7 +316,7 @@ void Game::SendData(QString data) {
     if (clientSocket.state() != QTcpSocket::ConnectedState) {
         return;
     }
-    clientSocket.write(data.toLocal8Bit());
+    clientSocket.write((data+"$").toLocal8Bit());
 
 }
 
@@ -334,6 +334,9 @@ void Game::ReadData() {
     for (QString& msg_data_list:data_list) {
         if (msg_data_list == "") continue;
         QStringList msg_data = msg_data_list.split("_");
+        if (debug) {
+            qDebug() << msg_data;
+        }
 
         if (msg_data[0] == "connect") {
             connectLevel = msg_data[2];
@@ -349,15 +352,7 @@ void Game::ReadData() {
         }
 
         if (msg_data[0] == "start") {
-            if (connectLevel == "host") {
-                //start game
-                Init();
-            }
-            else if (connectLevel == "join") {
-                //send game start, and start game
-                SendData("start_0");
-                Init();
-            }
+            Init();
         }
         else if (msg_data[0] == "disconnect") {
     //        connectLevel = "";
@@ -402,9 +397,7 @@ void Game::ReadData() {
 //                enemyManger->Start();
             }
         }
-        if (debug) {
-            qDebug() << msg_data;
-        }
+
     }
 
 }

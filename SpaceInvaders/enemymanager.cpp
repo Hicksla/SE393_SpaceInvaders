@@ -83,6 +83,9 @@ void EnemyManager::loadEnemies()
             }
         }
     }
+    enemy_dir = RIGHT;
+    previous_enemy_dir = RIGHT;
+    movement_flag = true;
 }
 
 void EnemyManager::unloadEnemies()
@@ -215,12 +218,12 @@ void EnemyManager::Start()
 
 void EnemyManager::IncreaseLevel()
 {
-    Pause();
+//    Pause();
     arrayMovementInterval -= (arrayMovementInterval/30);
     shootOdds--;
     enemiesKilled = 0;
     loadEnemies();
-    Start();
+//    Start();
 }
 
 QString EnemyManager::toString() {
