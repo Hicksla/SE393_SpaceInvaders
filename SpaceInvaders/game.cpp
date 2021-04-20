@@ -55,23 +55,25 @@ void Game::Init()
 
     fpsTimer->start();
     enemyManger->Start();
+    // moved this
+    enemyManger->loadEnemies();
 
     if (connectLevel == "host") {
-        enemyManger->loadEnemies();
         connect(enemySendTimer, &QTimer::timeout, this, &Game::SendEnemies);
-        enemySendTimer->setInterval(2000);
+        enemySendTimer->setInterval(200);
         enemySendTimer->start();
     }
 }
 
 void Game::Update()
 {
-    if (enemyManger->enemies.size() <= 0)
-    {
-        enemyManger->IncreaseLevel();
-        level++;
-        lives++;
-    }
+    // moved to check collisions
+//    if (enemyManger->enemies.size() <= 0)
+//    {
+//        enemyManger->IncreaseLevel();
+//        level++;
+//        lives++;
+//    }
 
     CheckCollisions();
     playerManager->player->Update();
@@ -123,6 +125,14 @@ void Game::CheckCollisions()
 
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
                 playerManager->bullets.erase(playerManager->bullets.begin() + i);
+
+                // moved from above
+                if (enemyManger->enemies.size() <= 0)
+                {
+                    enemyManger->IncreaseLevel();
+                    level++;
+                    lives++;
+                }
             }
         }
     }
@@ -321,7 +331,8 @@ void Game::ReadData() {
 
     QStringList data_list = data.split("$");
 
-    for (QString msg_data_list:data_list) {
+    for (QString& msg_data_list:data_list) {
+        if (msg_data_list == "") continue;
         QStringList msg_data = msg_data_list.split("_");
 
         if (msg_data[0] == "connect") {
@@ -381,11 +392,19 @@ void Game::ReadData() {
                 playerManager->bullets.push_back(Bullet(playerManager->altPlayer->x + ((playerManager->altPlayer->w/2)-5), playerManager->altPlayer->y, 10, 10));
             }
         }
-        else if (connectLevel == "join" && msg_data[0] == "e") {
-            // parse enemy data
-            enemyManger->setEnemies(msg_data[1]);
+        else if (msg_data[0] == "e") {
+            if (connectLevel == "join") {
+                // parse enemy data
+                enemyManger->setEnemies(msg_data[1]);
+                SendData("e_0");
+            }
+            else if (connectLevel == "host") {
+//                enemyManger->Start();
+            }
         }
-        qDebug() << msg_data;
+        if (debug) {
+            qDebug() << msg_data;
+        }
     }
 
 }
@@ -400,5 +419,6 @@ void Game::JoinGame(QString gameStr) {
 
 
 void Game::SendEnemies() {
+//    enemyManger->Pause();
     SendData("e_"+enemyManger->toString());
 }

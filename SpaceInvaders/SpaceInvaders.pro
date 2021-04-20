@@ -35,7 +35,8 @@ HEADERS += \
     game.h \
     mainwindow.h \
     player.h \
-    playermanager.h
+    playermanager.h \
+    settings.h
 
 FORMS += \
     mainwindow.ui

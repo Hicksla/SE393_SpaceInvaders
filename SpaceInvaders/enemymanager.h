@@ -9,6 +9,7 @@
 
 #include "enemy.h"
 #include "bullet.h"
+#include "settings.h"
 
 enum Enemy_Movement {LEFT, RIGHT, DOWN};
 

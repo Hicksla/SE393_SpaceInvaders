@@ -121,7 +121,7 @@ function sendData(socket, data) {
 function transmitData(_socket, data) {
     games[_socket.gameString].forEach(function(socket) {
         if (!socket.destroyed && socket != _socket) {
-            console.log(`sending to: ${socket.info}> ${data}`);
+            // console.log(`sending to: ${socket.info}> ${data}`);
             sendData(socket, data);
         }
     });

@@ -223,6 +223,7 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro C:/Qt5/5.15.2/mingw81_64/mkspecs/wi
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/qt_config.prf \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/win32-g++/qmake.conf \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/exclusive_builds.prf \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/toolchain.prf \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/default_pre.prf \
@@ -252,7 +253,6 @@ Makefile: ../SpaceInvaders/SpaceInvaders.pro C:/Qt5/5.15.2/mingw81_64/mkspecs/wi
 		C:/Qt5/5.15.2/mingw81_64/lib/Qt5Network.prl \
 		C:/Qt5/5.15.2/mingw81_64/lib/Qt5Core.prl \
 		C:/Qt5/5.15.2/mingw81_64/lib/qtmain.prl \
-		.qmake.stash \
 		C:/Qt5/5.15.2/mingw81_64/mkspecs/features/build_pass.prf \
 		../SpaceInvaders/Bacteria.qrc \
 		../SpaceInvaders/RedBloodCell.qrc \
@@ -413,6 +413,7 @@ C:/Qt5/5.15.2/mingw81_64/mkspecs/features/qt_functions.prf:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/qt_config.prf:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/win32-g++/qmake.conf:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/exclusive_builds.prf:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/toolchain.prf:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/default_pre.prf:
@@ -442,7 +443,6 @@ C:/Qt5/5.15.2/mingw81_64/lib/Qt5Gui.prl:
 C:/Qt5/5.15.2/mingw81_64/lib/Qt5Network.prl:
 C:/Qt5/5.15.2/mingw81_64/lib/Qt5Core.prl:
 C:/Qt5/5.15.2/mingw81_64/lib/qtmain.prl:
-.qmake.stash:
 C:/Qt5/5.15.2/mingw81_64/mkspecs/features/build_pass.prf:
 ../SpaceInvaders/Bacteria.qrc:
 ../SpaceInvaders/RedBloodCell.qrc:

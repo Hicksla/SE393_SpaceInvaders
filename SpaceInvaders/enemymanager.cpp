@@ -150,9 +150,11 @@ void EnemyManager::updateEnemyArrayLoc()
 void EnemyManager::setEnemies(QString enemies_str_lst) {
     unloadEnemies();
     QStringList enemies_lst = enemies_str_lst.split(",");
-    for (QString enemy_str:enemies_lst) {
+    for (QString& enemy_str:enemies_lst) {
         if (enemy_str==""||enemy_str == "e") continue;
-        qDebug() << enemy_str;
+        if (debug) {
+            qDebug() << enemy_str;
+        }
         QStringList enemy_data = enemy_str.split(":");
         bool okLevel,okx,oky;
         int level = enemy_data[0].toInt(&okLevel);

@@ -15,6 +15,7 @@
 #include "enemymanager.h"
 #include "playermanager.h"
 #include "bullet.h"
+#include "settings.h"
 
 enum KeyActionType {PRESS, RELEASE};
 
