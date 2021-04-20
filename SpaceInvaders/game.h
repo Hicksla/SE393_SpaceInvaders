@@ -28,6 +28,8 @@ public:
     void Draw(QPainter *p, QBrush *brush);
     void CheckCollisions();
     void PauseGame();
+    void UnpauseGame();
+    void SendStartGame();
 
     void KeyBoardInput(QKeyEvent *key, KeyActionType action);
     void AddFpsTimer(QTimer *timer);
@@ -61,12 +63,14 @@ private:
     void SendData(QString data);
     void ReadData();
     void JoinGame(QString gameStr);
+    void SendEnemies();
 
     QTcpSocket clientSocket;
     QString gameString = "waitingList";
     QString connectLevel = "";
 
     QTimer *netReadTimer = new QTimer;
+    QTimer *enemySendTimer = new QTimer;
 
 
 };

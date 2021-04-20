@@ -5,6 +5,7 @@
 #include <ctime>
 #include <QPainter>
 #include <QTimer>
+#include <QDebug>
 
 #include "enemy.h"
 #include "bullet.h"
@@ -19,11 +20,13 @@ public:
     void loadEnemies();
     void unloadEnemies();
     void updateEnemyArrayLoc();
+    void setEnemies(QString enemies_str_lst);
 
     void GenEnemyBullets();
     void Pause();
     void Start();
     void IncreaseLevel();
+    QString toString();
 
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;

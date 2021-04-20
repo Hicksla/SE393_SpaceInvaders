@@ -39,7 +39,7 @@ const server = net.createServer(function(_socket) {
                     games[_socket.gameString] = [_socket];
                     console.log(`${_socket.info}> ${oldGameString} -> ${_socket.gameString}`);
                     _socket.connectLevel = 'host';
-                    sendData(_socket,'connect_host');
+                    sendData(_socket,`connect_${_socket.gameString}_host`);
                 } else if ((games[_socket.gameString].length == 1 || _socket.gameString=='waitingList') && !games[_socket.gameString].includes(_socket)) {
                     if (games['waitingList'].includes(_socket)) {
                         games['waitingList'].splice(games['waitingList'].indexOf(_socket),1);
@@ -47,10 +47,10 @@ const server = net.createServer(function(_socket) {
                     games[_socket.gameString].push(_socket);
                     console.log(`${_socket.info}> ${oldGameString} -> ${_socket.gameString}`);
                     _socket.connectLevel = 'join';
-                    sendData(_socket,'connect_join');
+                    sendData(_socket,`connect_${_socket.gameString}_join`);
                 } else {
                     _socket.connectLevel = 'fail';
-                    sendData(_socket,'connect_fail');
+                    sendData(_socket,`connect_${_socket.gameString}_fail`);
                 }
                 break;
             case 'l':
@@ -64,6 +64,12 @@ const server = net.createServer(function(_socket) {
                 break;
             case 'a':
                 transmitData(_socket, `a_${data[1]}_${data[2]}_${data[3]}`);
+                break;
+            case 'e':
+                transmitData(_socket, `e_${data[1]}`);
+                break;
+            case 'start':
+                transmitData(_socket, `start_${data[1]}`);
                 break;
             default:
 

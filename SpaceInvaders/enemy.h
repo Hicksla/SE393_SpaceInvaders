@@ -11,6 +11,7 @@ public:
     Enemy(int RowLevel);
 
     void SetRect(QRect Rect);
+    QString toString();
 
     enemy_type type;
     int rowLevel;

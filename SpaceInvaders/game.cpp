@@ -17,7 +17,7 @@ void Game::AddFpsTimer(QTimer *timer)
     whiteBloodCell->load(":/images/whitebloodcell.png");
 
     fpsTimer = timer;
-    Init();
+//    Init();
 }
 
 void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
@@ -33,6 +33,10 @@ void Game::PauseGame()
     fpsTimer->stop();
 }
 
+void Game::UnpauseGame() {
+    enemyManger->Start();
+    fpsTimer->start();
+}
 
 void Game::Init()
 {
@@ -49,9 +53,15 @@ void Game::Init()
         playerManager->LoadPlayers();
     }
 
-    enemyManger->loadEnemies();
     fpsTimer->start();
     enemyManger->Start();
+
+    if (connectLevel == "host") {
+        enemyManger->loadEnemies();
+        connect(enemySendTimer, &QTimer::timeout, this, &Game::SendEnemies);
+        enemySendTimer->setInterval(2000);
+        enemySendTimer->start();
+    }
 }
 
 void Game::Update()
@@ -277,7 +287,12 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
             break;
         case Qt::Key_C:
             JoinGame("abc_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
+            break;
+        case Qt::Key_V:
+            SendData("start_0");
+            break;
         }
+
     }
 
 }
@@ -300,17 +315,38 @@ void Game::ReadData() {
         return;
     }
 
+
     QString data(clientSocket.readAll());
     if (data=="") return;
 
-    // switch to iterate through all when done testing **********
     QStringList data_list = data.split("$");
 
     for (QString msg_data_list:data_list) {
         QStringList msg_data = msg_data_list.split("_");
 
         if (msg_data[0] == "connect") {
-            connectLevel = msg_data[1];
+            connectLevel = msg_data[2];
+            if (connectLevel == "host") {
+                gameString = msg_data[1];
+            }
+            else if (connectLevel == "join") {
+                gameString = msg_data[1];
+            }
+        }
+        else if (gameString == "waitingList") {
+            return;
+        }
+
+        if (msg_data[0] == "start") {
+            if (connectLevel == "host") {
+                //start game
+                Init();
+            }
+            else if (connectLevel == "join") {
+                //send game start, and start game
+                SendData("start_0");
+                Init();
+            }
         }
         else if (msg_data[0] == "disconnect") {
     //        connectLevel = "";
@@ -345,6 +381,10 @@ void Game::ReadData() {
                 playerManager->bullets.push_back(Bullet(playerManager->altPlayer->x + ((playerManager->altPlayer->w/2)-5), playerManager->altPlayer->y, 10, 10));
             }
         }
+        else if (connectLevel == "join" && msg_data[0] == "e") {
+            // parse enemy data
+            enemyManger->setEnemies(msg_data[1]);
+        }
         qDebug() << msg_data;
     }
 
@@ -358,3 +398,7 @@ void Game::JoinGame(QString gameStr) {
     }
 }
 
+
+void Game::SendEnemies() {
+    SendData("e_"+enemyManger->toString());
+}

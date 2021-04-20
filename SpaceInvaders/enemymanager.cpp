@@ -147,6 +147,25 @@ void EnemyManager::updateEnemyArrayLoc()
     arrayMovementTimer->start();
 }
 
+void EnemyManager::setEnemies(QString enemies_str_lst) {
+    unloadEnemies();
+    QStringList enemies_lst = enemies_str_lst.split(",");
+    for (QString enemy_str:enemies_lst) {
+        if (enemy_str==""||enemy_str == "e") continue;
+        qDebug() << enemy_str;
+        QStringList enemy_data = enemy_str.split(":");
+        bool okLevel,okx,oky;
+        int level = enemy_data[0].toInt(&okLevel);
+        int x = enemy_data[1].toInt(&okx);
+        int y = enemy_data[2].toInt(&oky);
+        if (!okx||!oky) return;
+
+        Enemy newEnemy(level);
+        newEnemy.SetRect(QRect(x,y,width,width));
+        enemies.push_back(newEnemy);
+    }
+}
+
 void EnemyManager::GenEnemyBullets()
 {
 //    srand(time(0));
@@ -200,4 +219,17 @@ void EnemyManager::IncreaseLevel()
     enemiesKilled = 0;
     loadEnemies();
     Start();
+}
+
+QString EnemyManager::toString() {
+    QString enemies_str;
+
+    // enemy data sep: :
+    // enemy sep: ,
+
+    for (Enemy e:enemies) {
+         enemies_str +=QString::number(e.rowLevel)+":"+QString::number(e.rect.x())+":"+QString::number(e.rect.y())+",";
+
+    }
+    return enemies_str;
 }
