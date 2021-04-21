@@ -159,7 +159,26 @@ void Game::CheckCollisions()
         }
     }
 
-    //Check if enemeies make it to the bottom
+    for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
+    {
+        for (unsigned int j=0; j<barriers.size(); j++)
+        {
+            if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
+            {
+                PauseGame();
+                break;
+            }
+        }
+    }
+
+    for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
+    {
+        if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
+        {
+            PauseGame();
+            break;
+        }
+    }
 
 }
 
