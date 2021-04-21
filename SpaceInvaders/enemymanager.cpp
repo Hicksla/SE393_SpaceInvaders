@@ -8,7 +8,7 @@ EnemyManager::EnemyManager()
 
 void EnemyManager::loadEnemies()
 {
-
+    unloadEnemies();
     for (int i=0; i < 5; i++)
     {
         for (int j=0; j < 11; j++)
@@ -232,7 +232,7 @@ QString EnemyManager::toString() {
     // enemy data sep: :
     // enemy sep: ,
 
-    for (Enemy e:enemies) {
+    for (Enemy& e:enemies) {
          enemies_str +=QString::number(e.rowLevel)+":"+QString::number(e.rect.x())+":"+QString::number(e.rect.y())+",";
 
     }

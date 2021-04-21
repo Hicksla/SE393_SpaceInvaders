@@ -65,6 +65,7 @@ private:
     void ReadData();
     void JoinGame(QString gameStr);
     void SendEnemies();
+    void SendStats();
 
     QTcpSocket clientSocket;
     QString gameString = "waitingList";
@@ -72,6 +73,7 @@ private:
 
     QTimer *netReadTimer = new QTimer;
     QTimer *enemySendTimer = new QTimer;
+    QTimer *statsSendTimer = new QTimer;
 
 
 };

@@ -62,18 +62,22 @@ void Game::Init()
         connect(enemySendTimer, &QTimer::timeout, this, &Game::SendEnemies);
         enemySendTimer->setInterval(500);
         enemySendTimer->start();
+
+        connect(statsSendTimer, &QTimer::timeout, this, &Game::SendStats);
+        statsSendTimer->setInterval(3000);
+        statsSendTimer->start();
     }
 }
 
 void Game::Update()
 {
-    // moved to check collisions
-//    if (enemyManger->enemies.size() <= 0)
-//    {
-//        enemyManger->IncreaseLevel();
-//        level++;
-//        lives++;
-//    }
+//     moved to check collisions
+    if (enemyManger->enemies.size() <= 0)
+    {
+        enemyManger->IncreaseLevel();
+        level++;
+        lives++;
+    }
 
     CheckCollisions();
     playerManager->player->Update();
@@ -103,6 +107,9 @@ void Game::CheckCollisions()
     {
         for (unsigned int j=0; j < enemyManger->enemies.size(); j++)
         {
+            if (debug) {
+                qDebug()<< i<<"  "<<j;
+            }
             if (collisionDetect.RectCollsion(playerManager->bullets[i].circle, enemyManger->enemies[j].rect))
             {
                 switch (enemyManger->enemies[j].rowLevel) {
@@ -397,6 +404,25 @@ void Game::ReadData() {
 //                enemyManger->Start();
             }
         }
+        else if (msg_data[0] == "stats") {
+            bool okScore,okLives,okLevel;
+            int newScore = msg_data[1].toInt(&okScore);
+            int newLives = msg_data[2].toInt(&okLives);
+            int newLevel = msg_data[3].toInt(&okLevel);
+            if (okScore&&okLives&&okLevel) {
+                score = newScore;
+                lives = newLives;
+                level = newLevel;
+            }
+        }
+        else if (msg_data[0] == "sync") {
+            // stop everything, and start it again
+            enemyManger->Pause();
+            fpsTimer->stop();
+
+            fpsTimer->start();
+            enemyManger->Start();
+        }
 
     }
 
@@ -410,8 +436,12 @@ void Game::JoinGame(QString gameStr) {
     }
 }
 
-
 void Game::SendEnemies() {
 //    enemyManger->Pause();
     SendData("e_"+enemyManger->toString());
 }
+
+void Game::SendStats() {
+    SendData("stats_"+QString::number(score)+"_"+QString::number(lives)+"_"+QString::number(level));
+}
+

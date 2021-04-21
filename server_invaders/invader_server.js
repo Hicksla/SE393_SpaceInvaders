@@ -75,6 +75,8 @@ const server = net.createServer(function(_socket) {
                     _socket.isReady = true;
                     startIfReady(_socket);
                     break;
+                case 'stats':
+                    transmitData(_socket, `stats_${data[1]}_${data[2]}_${data[3]}`);
                 default:
     
             }
@@ -141,10 +143,12 @@ function startIfReady(_socket) {
     var playersReady = true;
     games[_socket.gameString].forEach(function(socket) {
         playersReady = playersReady && socket.isReady;
+        
     });
 
     if (playersReady) {
         sendData(_socket, `start_0`);
         transmitData(_socket, `start_0`);
+        
     }
-}
+}       

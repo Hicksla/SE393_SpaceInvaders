@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-static bool debug = true;
+static bool debug = false;
 
 #endif // SETTINGS_H
 
