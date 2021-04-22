@@ -21,7 +21,7 @@ void PlayerManager::Shoot()
 {
     if (shootTimeOut)
     {
-       bullets.push_back(Bullet(player->x + ((player->w/2)-5), player->y, 10, 10));
+       bullets.push_back(Bullet(player->x + ((player->w/2)-5), player->y, 10, 20));
        shootTimeOut = false;
        shootTimer->start();
     }

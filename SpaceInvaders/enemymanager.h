@@ -35,8 +35,9 @@ private:
     int arrayMovementInterval = arrayStartingInterval;
     QTimer *shootTimer = new QTimer;
 
-    int xVel = 2;
-    int yVel = 4;
+    double xVel = 2.0;
+    double yVel = 7.0;
+    double mysteryShipVel = 6.0;
 
     int shootOdds = 12;
     int width = 30;

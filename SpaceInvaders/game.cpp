@@ -64,6 +64,7 @@ void Game::Update()
     }
 
     CheckCollisions();
+    enemyManger->updateEnemyArrayLoc();
     playerManager->player->Update();
 
     for (unsigned int i=0; i< playerManager->bullets.size(); i++)

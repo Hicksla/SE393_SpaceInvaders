@@ -2,7 +2,7 @@
 
 EnemyManager::EnemyManager()
 {
-    connect(arrayMovementTimer, &QTimer::timeout, this, &EnemyManager::updateEnemyArrayLoc);
+    //connect(arrayMovementTimer, &QTimer::timeout, this, &EnemyManager::updateEnemyArrayLoc);
     connect(shootTimer, &QTimer::timeout, this, &EnemyManager::GenEnemyBullets);
 }
 
@@ -132,7 +132,7 @@ void EnemyManager::updateEnemyArrayLoc()
         }else if (enemy_dir == LEFT)
         {
             enemies[i].SetRect(QRect(x-xVel, y, width, width));
-            if (enemies[i].rect.x() <= (145+20))
+            if (enemies[i].rect.x() <= (145))
             {
                 movement_flag = false;
             }
@@ -143,7 +143,8 @@ void EnemyManager::updateEnemyArrayLoc()
         }
 
     }
-    arrayMovementTimer->setInterval(arrayMovementInterval);
+
+    arrayMovementTimer->setInterval(arrayStartingInterval);
     arrayMovementTimer->start();
 }
 
@@ -152,30 +153,12 @@ void EnemyManager::GenEnemyBullets()
     srand(time(0));
 
     unsigned int r;
-    unsigned int divisor;
 
-    if (enemies.size() % 10 < 3)
-    {
-        arrayMovementInterval -= (arrayMovementInterval/40);
-    }
+   r = rand() % enemies.size();
 
-    if (enemies.size() <= 3)
-    {
-        divisor = 1;
-    }else
-    {
-        divisor = enemies.size()/ 2;
-    }
+   Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 10, -6);
+   bullets.push_back(b);
 
-    if (divisor)
-
-    for (unsigned int i=0; i<enemies.size()/divisor; i++)
-    {
-       r = rand() % enemies.size();
-
-       Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 10, -2);
-       bullets.push_back(b);
-    }
 }
 
 void EnemyManager::Pause()
