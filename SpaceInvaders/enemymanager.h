@@ -25,6 +25,8 @@ public:
     void Start();
     void IncreaseLevel();
 
+    void IncreseSpeed();
+
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
 
@@ -35,12 +37,18 @@ private:
     int arrayMovementInterval = arrayStartingInterval;
     QTimer *shootTimer = new QTimer;
 
-    double xVel = 2.0;
-    double yVel = 7.0;
-    double mysteryShipVel = 6.0;
+    double xVel = 1.0;
+    double yVel = 4.0;
+    double mysteryShipVel = 4.0;
+
+    int mysteryShipsLeft = 2;
 
     int shootOdds = 12;
     int width = 30;
+
+    unsigned int ENEMYSTARTAMOUNT = 55;
+    unsigned int ROWSIZE = 11;
+    unsigned int ROWS = 5;
 
     //Handles Memory for moving enemy array correctly
     Enemy_Movement enemy_dir = RIGHT;

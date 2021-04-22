@@ -12,6 +12,8 @@ void Game::AddFpsTimer(QTimer *timer)
     virus2->load(":/images/virus2.png");
     bacteria->load(":/images/bacteria.png");
     whiteBloodCell->load(":/images/whitebloodcell.png");
+    redBloodCell->load(":/images/redbloodcell.png");
+
 
     fpsTimer = timer;
     Init();
@@ -56,9 +58,9 @@ void Game::Update()
 {
     if (enemyManger->enemies.size() <= 0)
     {
-        enemyManger->IncreaseLevel();
         ClearBarriers();
         BuildBarriers();
+        enemyManger->IncreaseLevel();
         level++;
         lives++;
     }
@@ -118,6 +120,9 @@ void Game::CheckCollisions()
             if (collisionDetect.RectCollsion(playerManager->bullets[i].circle, enemyManger->enemies[j].rect))
             {
                 switch (enemyManger->enemies[j].rowLevel) {
+                case -1:
+                    score += 100;
+                    break;
                 case 0:
                     score += 40;
                     break;
@@ -209,6 +214,9 @@ void Game::Draw(QPainter *p, QBrush *brush)
     for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
     {
         switch (enemyManger->enemies[i].rowLevel) {
+        case -1:
+            p->drawImage(enemyManger->enemies[i].rect, *redBloodCell);
+            break;
         case 0:
             p->drawImage(enemyManger->enemies[i].rect, *virus1);
             break;

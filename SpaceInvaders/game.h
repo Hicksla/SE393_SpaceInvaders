@@ -46,6 +46,7 @@ private:
     QImage *virus2 = new QImage;
     QImage *bacteria = new QImage;
     QImage *whiteBloodCell = new QImage;
+    QImage *redBloodCell = new QImage;
 
     std::vector<QRect> barriers;
 

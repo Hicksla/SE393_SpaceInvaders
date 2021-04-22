@@ -2,7 +2,6 @@
 
 EnemyManager::EnemyManager()
 {
-    //connect(arrayMovementTimer, &QTimer::timeout, this, &EnemyManager::updateEnemyArrayLoc);
     connect(shootTimer, &QTimer::timeout, this, &EnemyManager::GenEnemyBullets);
 }
 
@@ -91,8 +90,23 @@ void EnemyManager::unloadEnemies()
     bullets.clear();
 }
 
+void EnemyManager::IncreseSpeed()
+{
+
+    if (enemies.size() == ENEMYSTARTAMOUNT - ROWSIZE || enemies.size() == ENEMYSTARTAMOUNT - (2*ROWSIZE)
+            || enemies.size() == ENEMYSTARTAMOUNT - (3*ROWSIZE) || enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE))
+    {
+        xVel = xVel + .01;
+    }else if (enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE+(3))||enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE+(1)))
+    {
+       xVel = xVel + .02;
+    }
+}
+
 void EnemyManager::updateEnemyArrayLoc()
 {
+    IncreseSpeed();
+
     if (enemy_dir == RIGHT && movement_flag == false)
     {
         enemy_dir = DOWN;
@@ -122,30 +136,58 @@ void EnemyManager::updateEnemyArrayLoc()
     {
         int x = enemies[i].rect.x();
         int y = enemies[i].rect.y();
-        if (enemy_dir == RIGHT)
+
+        if (enemies[i].rowLevel == -1)
         {
-            enemies[i].SetRect(QRect(x+xVel, y, width, width));
-            if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-(145-width)))
+            if (x+enemies[i].rect.width() + mysteryShipVel >= 800 || x - mysteryShipVel <= 0 )
             {
+                enemies.erase(enemies.begin() + i);
+            }else
+            {
+                enemies[i].SetRect(QRect(x+mysteryShipVel, y, width, width));
+            }
+
+        }else{
+            if (enemy_dir == RIGHT)
+            {
+                enemies[i].SetRect(QRect(x+xVel, y, width, width));
+                if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-(145-width)))
+                {
+                    movement_flag = false;
+                }
+            }else if (enemy_dir == LEFT)
+            {
+                enemies[i].SetRect(QRect(x-xVel, y, width, width));
+                if (enemies[i].rect.x() <= (145))
+                {
+                    movement_flag = false;
+                }
+            }else if (enemy_dir == DOWN)
+            {
+                enemies[i].SetRect(QRect(x, y+yVel, width, width));
                 movement_flag = false;
             }
-        }else if (enemy_dir == LEFT)
-        {
-            enemies[i].SetRect(QRect(x-xVel, y, width, width));
-            if (enemies[i].rect.x() <= (145))
-            {
-                movement_flag = false;
-            }
-        }else if (enemy_dir == DOWN)
-        {
-            enemies[i].SetRect(QRect(x, y+yVel, width, width));
-            movement_flag = false;
         }
 
     }
 
-    arrayMovementTimer->setInterval(arrayStartingInterval);
-    arrayMovementTimer->start();
+    if (enemies.size() <= ENEMYSTARTAMOUNT - 13 && mysteryShipsLeft == 2)
+    {
+        Enemy mysteryShip(-1);
+        mysteryShip.SetRect(QRect(145, 80, 30, 30));
+        enemies.push_back(mysteryShip);
+        mysteryShipVel = 4.0;
+        mysteryShipsLeft--;
+
+    }else if (enemies.size() <= ENEMYSTARTAMOUNT - 39 && mysteryShipsLeft == 1)
+    {
+        Enemy mysteryShip(-1);
+        enemies.push_back(mysteryShip);
+        mysteryShip.SetRect(QRect(655, 80, 30, 30));
+        mysteryShipVel = -4.0;
+        mysteryShipsLeft--;
+    }
+
 }
 
 void EnemyManager::GenEnemyBullets()
@@ -163,14 +205,16 @@ void EnemyManager::GenEnemyBullets()
 
 void EnemyManager::Pause()
 {
-    arrayMovementTimer->stop();
-    shootTimer->start();
+    shootTimer->stop();
 }
 
 void EnemyManager::Start()
 {
-    xVel = 2.0;
-    yVel = 7.0;
+    xVel = 1.0;
+    yVel = 4.0;
+    mysteryShipVel *= -1;
+    mysteryShipsLeft = 2;
+    mysteryShipVel = 6.0;
     shootTimer->setInterval(1200);
     shootTimer->start();
 }
@@ -179,8 +223,6 @@ void EnemyManager::IncreaseLevel()
 {
     Pause();
     bullets.clear();
-    shootOdds--;
-    enemiesKilled = 0;
     loadEnemies();
     Start();
 }
