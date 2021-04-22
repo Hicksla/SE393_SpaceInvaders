@@ -100,13 +100,13 @@ void EnemyManager::IncreseSpeed()
         if (enemies.size() == ENEMYSTARTAMOUNT - ROWSIZE || enemies.size() == ENEMYSTARTAMOUNT - (2*ROWSIZE)
                 || enemies.size() == ENEMYSTARTAMOUNT - (3*ROWSIZE) || enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE))
         {
-            xVel += .01;
-        }else if (enemies.size() == 3 || enemies.size() == 1)
+            xVel += .02;
+        }else if (enemies.size() == 3)
         {
-           xVel += .02;
+           xVel += .03;
         }else if(enemies.size() == 1)
         {
-            xVel += .02;
+            xVel += .04;
             maxSpeed = true;
         }
     }
@@ -163,14 +163,14 @@ void EnemyManager::updateEnemyArrayLoc()
             if (enemy_dir == RIGHT)
             {
                 enemies[i].SetRect(QRect(x+xVel, y, width, width));
-                if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-(145-width)))
+                if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-(100-width)))
                 {
                     movement_flag = false;
                 }
             }else if (enemy_dir == LEFT)
             {
                 enemies[i].SetRect(QRect(x-xVel, y, width, width));
-                if (enemies[i].rect.x() <= 145)
+                if (enemies[i].rect.x() <= 100)
                 {
                     movement_flag = false;
                 }
