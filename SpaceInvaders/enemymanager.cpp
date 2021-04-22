@@ -1,4 +1,5 @@
 #include "enemymanager.h"
+#include <iostream>
 
 EnemyManager::EnemyManager()
 {
@@ -92,15 +93,24 @@ void EnemyManager::unloadEnemies()
 
 void EnemyManager::IncreseSpeed()
 {
-
-    if (enemies.size() == ENEMYSTARTAMOUNT - ROWSIZE || enemies.size() == ENEMYSTARTAMOUNT - (2*ROWSIZE)
-            || enemies.size() == ENEMYSTARTAMOUNT - (3*ROWSIZE) || enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE))
+    if (maxSpeed == true)
     {
-        xVel = xVel + .01;
-    }else if (enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE+(3))||enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE+(1)))
-    {
-       xVel = xVel + .02;
+        return;
+    }else{
+        if (enemies.size() == ENEMYSTARTAMOUNT - ROWSIZE || enemies.size() == ENEMYSTARTAMOUNT - (2*ROWSIZE)
+                || enemies.size() == ENEMYSTARTAMOUNT - (3*ROWSIZE) || enemies.size() == ENEMYSTARTAMOUNT - (4*ROWSIZE))
+        {
+            xVel += .01;
+        }else if (enemies.size() == 3 || enemies.size() == 1)
+        {
+           xVel += .02;
+        }else if(enemies.size() == 1)
+        {
+            xVel += .02;
+            maxSpeed = true;
+        }
     }
+
 }
 
 void EnemyManager::updateEnemyArrayLoc()
@@ -132,6 +142,8 @@ void EnemyManager::updateEnemyArrayLoc()
         movement_flag = true;
     }
 
+    std::cout << xVel << std::endl;
+
     for (unsigned int i=0; i<enemies.size(); i++)
     {
         int x = enemies[i].rect.x();
@@ -158,7 +170,7 @@ void EnemyManager::updateEnemyArrayLoc()
             }else if (enemy_dir == LEFT)
             {
                 enemies[i].SetRect(QRect(x-xVel, y, width, width));
-                if (enemies[i].rect.x() <= (145))
+                if (enemies[i].rect.x() <= 145)
                 {
                     movement_flag = false;
                 }
@@ -171,7 +183,7 @@ void EnemyManager::updateEnemyArrayLoc()
 
     }
 
-    if (enemies.size() <= ENEMYSTARTAMOUNT - 13 && mysteryShipsLeft == 2)
+    if (enemies.size() <= ENEMYSTARTAMOUNT - 26 && mysteryShipsLeft == 2)
     {
         Enemy mysteryShip(-1);
         mysteryShip.SetRect(QRect(145, 80, 30, 30));
@@ -211,10 +223,11 @@ void EnemyManager::Pause()
 void EnemyManager::Start()
 {
     xVel = 1.0;
-    yVel = 4.0;
+    yVel = 6.0;
     mysteryShipVel *= -1;
     mysteryShipsLeft = 2;
     mysteryShipVel = 6.0;
+    maxSpeed = false;
     shootTimer->setInterval(1200);
     shootTimer->start();
 }

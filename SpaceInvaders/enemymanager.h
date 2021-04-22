@@ -38,7 +38,7 @@ private:
     QTimer *shootTimer = new QTimer;
 
     double xVel = 1.0;
-    double yVel = 4.0;
+    double yVel = 6.0;
     double mysteryShipVel = 4.0;
 
     int mysteryShipsLeft = 2;
@@ -49,6 +49,7 @@ private:
     unsigned int ENEMYSTARTAMOUNT = 55;
     unsigned int ROWSIZE = 11;
     unsigned int ROWS = 5;
+    bool maxSpeed = false;
 
     //Handles Memory for moving enemy array correctly
     Enemy_Movement enemy_dir = RIGHT;
