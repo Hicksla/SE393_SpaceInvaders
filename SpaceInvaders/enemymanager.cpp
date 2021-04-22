@@ -169,9 +169,9 @@ void EnemyManager::Pause()
 
 void EnemyManager::Start()
 {
+    xVel = 2.0;
+    yVel = 7.0;
     shootTimer->setInterval(1200);
-    arrayMovementTimer->setInterval(arrayStartingInterval);
-    arrayMovementTimer->start();
     shootTimer->start();
 }
 
