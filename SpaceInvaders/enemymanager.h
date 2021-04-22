@@ -30,9 +30,13 @@ public:
 
     int enemiesKilled = 0;
 private:
-    QTimer *arrayMovementTimer = new QTimer;
-    int arrayMovementInterval = 1000; // in ms
+    QTimer *arrayMovementTimer = new QTimer;// in ms
+    int arrayStartingInterval = 16;
+    int arrayMovementInterval = arrayStartingInterval;
     QTimer *shootTimer = new QTimer;
+
+    int xVel = 2;
+    int yVel = 4;
 
     int shootOdds = 12;
     int width = 30;

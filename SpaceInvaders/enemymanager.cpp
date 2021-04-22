@@ -17,12 +17,12 @@ void EnemyManager::loadEnemies()
             if (i == 0){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(125, 80, width, width));
+                    newEnemey.SetRect(QRect(145, 80, width, width));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 50, 80, width, width));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 30, 80, width, width));
                     enemies.push_back(newEnemey);
                 }
             }
@@ -30,12 +30,12 @@ void EnemyManager::loadEnemies()
             else if (i == 1){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(125, 120, width, width));
+                    newEnemey.SetRect(QRect(145, 120, width, width));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 50, 120, width, width));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 30, 120, width, width));
                     enemies.push_back(newEnemey);
                 }
 
@@ -44,12 +44,12 @@ void EnemyManager::loadEnemies()
             else if (i == 2){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(125, 160, width, width));
+                    newEnemey.SetRect(QRect(145, 160, width, width));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 50, 160, width, width));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 30, 160, width, width));
                     enemies.push_back(newEnemey);
                 }
 
@@ -58,12 +58,12 @@ void EnemyManager::loadEnemies()
             else if (i == 3){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(125, 200, width, width));
+                    newEnemey.SetRect(QRect(145, 200, width, width));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 50, 200, width, width));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 30, 200, width, width));
                     enemies.push_back(newEnemey);
                 }
 
@@ -71,12 +71,12 @@ void EnemyManager::loadEnemies()
             else if (i == 4){
                 if (j==0)
                 {
-                    newEnemey.SetRect(QRect(125, 240, width, width));
+                    newEnemey.SetRect(QRect(145, 240, width, width));
                     enemies.push_back(newEnemey);
                 }
                 else
                 {
-                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 50, 240, width, width));
+                    newEnemey.SetRect(QRect(enemies[j-1].rect.x() + 30, 240, width, width));
                     enemies.push_back(newEnemey);
                 }
 
@@ -124,21 +124,21 @@ void EnemyManager::updateEnemyArrayLoc()
         int y = enemies[i].rect.y();
         if (enemy_dir == RIGHT)
         {
-            enemies[i].SetRect(QRect(x+20, y, width, width));
-            if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-width))
+            enemies[i].SetRect(QRect(x+xVel, y, width, width));
+            if (enemies[i].rect.x() + enemies[i].rect.width() >= (800-(145-width)))
             {
                 movement_flag = false;
             }
         }else if (enemy_dir == LEFT)
         {
-            enemies[i].SetRect(QRect(x-20, y, width, width));
-            if (enemies[i].rect.x() <= (0+20))
+            enemies[i].SetRect(QRect(x-xVel, y, width, width));
+            if (enemies[i].rect.x() <= (145+20))
             {
                 movement_flag = false;
             }
         }else if (enemy_dir == DOWN)
         {
-            enemies[i].SetRect(QRect(x, y+20, width, width));
+            enemies[i].SetRect(QRect(x, y+yVel, width, width));
             movement_flag = false;
         }
 
@@ -187,7 +187,7 @@ void EnemyManager::Pause()
 void EnemyManager::Start()
 {
     shootTimer->setInterval(1200);
-    arrayMovementTimer->setInterval(arrayMovementInterval);
+    arrayMovementTimer->setInterval(arrayStartingInterval);
     arrayMovementTimer->start();
     shootTimer->start();
 }
@@ -195,7 +195,7 @@ void EnemyManager::Start()
 void EnemyManager::IncreaseLevel()
 {
     Pause();
-    arrayMovementInterval -= (arrayMovementInterval/30);
+    bullets.clear();
     shootOdds--;
     enemiesKilled = 0;
     loadEnemies();
