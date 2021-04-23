@@ -3,6 +3,7 @@
 
 EnemyManager::EnemyManager()
 {
+    laser.setSource(QUrl::fromLocalFile(":/laser/Music/laser.wav"));
     connect(shootTimer, &QTimer::timeout, this, &EnemyManager::GenEnemyBullets);
 }
 
@@ -142,8 +143,6 @@ void EnemyManager::updateEnemyArrayLoc()
         movement_flag = true;
     }
 
-    std::cout << xVel << std::endl;
-
     for (unsigned int i=0; i<enemies.size(); i++)
     {
         int x = enemies[i].rect.x();
@@ -212,6 +211,7 @@ void EnemyManager::GenEnemyBullets()
 
    Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 10, -6);
    bullets.push_back(b);
+   laser.play();
 
 }
 

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/Last Frontier">
+        <file>Music/08 The Last Frontier.wav</file>
+    </qresource>
+</RCC>

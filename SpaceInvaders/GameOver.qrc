@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/GameOver">
+        <file>Music/06 The Victors' Homecoming.wav</file>
+    </qresource>
+</RCC>

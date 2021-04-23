@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/laser">
+        <file>Music/laser.wav</file>
+    </qresource>
+</RCC>

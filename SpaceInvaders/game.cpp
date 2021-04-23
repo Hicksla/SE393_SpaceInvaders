@@ -13,7 +13,10 @@ void Game::AddFpsTimer(QTimer *timer)
     bacteria->load(":/images/bacteria.png");
     whiteBloodCell->load(":/images/whitebloodcell.png");
     redBloodCell->load(":/images/redbloodcell.png");
-
+    music.setSource(QUrl::fromLocalFile(":/Last Frontier/Music/08 The Last Frontier.wav"));
+    explosion.setSource(QUrl::fromLocalFile(":/explosion/Music/explosion.wav"));
+    playerExplosion.setSource(QUrl::fromLocalFile(":/playerExplosion/Music/atari_boom5.wav"));
+    gameOver.setSource(QUrl::fromLocalFile(":/GameOver/Music/06 The Victors' Homecoming.wav"));
 
     fpsTimer = timer;
     Init();
@@ -28,6 +31,8 @@ void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber 
 
 void Game::PauseGame()
 {
+    music.stop();
+    gameOver.play();
     enemyManger->Pause();
     fpsTimer->stop();
 }
@@ -52,17 +57,25 @@ void Game::Init()
     BuildBarriers();
     fpsTimer->start();
     enemyManger->Start();
+
+    if(gameOver.isPlaying())
+    {
+        gameOver.stop();
+    }
+    music.play();
 }
 
 void Game::Update()
 {
     if (enemyManger->enemies.size() <= 0)
     {
+        music.stop();
         ClearBarriers();
         BuildBarriers();
         enemyManger->IncreaseLevel();
         level++;
         lives++;
+        music.play();
     }
 
     CheckCollisions();
@@ -95,6 +108,7 @@ void Game::CheckCollisions()
         {
             if (collisionDetect.RectCollsion(barriers[i], enemyManger->bullets[j].circle))
             {
+                explosion.play();
                 enemyManger->bullets.erase(enemyManger->bullets.begin() + j);
                 barriers.erase(barriers.begin() + i);
             }
@@ -107,6 +121,7 @@ void Game::CheckCollisions()
         {
             if (collisionDetect.RectCollsion(barriers[i], playerManager->bullets[j].circle))
             {
+                explosion.play();
                 playerManager->bullets.erase(playerManager->bullets.begin() + j);
                 barriers.erase(barriers.begin() + i);
             }
@@ -140,6 +155,7 @@ void Game::CheckCollisions()
                     break;
                 }
 
+                explosion.play();
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
                 playerManager->bullets.erase(playerManager->bullets.begin() + i);
             }
@@ -150,6 +166,7 @@ void Game::CheckCollisions()
     {
         if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, playerManager->player->rect))
         {
+            playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             lives--;
             if (lives > 0)

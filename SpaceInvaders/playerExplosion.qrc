@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/playerExplosion">
+        <file>Music/atari_boom5.wav</file>
+    </qresource>
+</RCC>

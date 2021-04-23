@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QLCDNumber>
 #include <QImage>
+#include <QSoundEffect>
 
 #include "collisiondetector.h"
 #include "enemymanager.h"
@@ -47,6 +48,11 @@ private:
     QImage *bacteria = new QImage;
     QImage *whiteBloodCell = new QImage;
     QImage *redBloodCell = new QImage;
+
+    QSoundEffect music;
+    QSoundEffect explosion;
+    QSoundEffect gameOver;
+    QSoundEffect playerExplosion;
 
     std::vector<QRect> barriers;
 

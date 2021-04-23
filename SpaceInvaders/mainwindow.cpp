@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
      connect(timer, &QTimer::timeout, this, &MainWindow::UpdateGraphics);
      timer->setInterval(16);
 
-     game->AddFpsTimer(timer);\
+     game->AddFpsTimer(timer);
      game->AddUiComponents(ui->scoreLcd, ui->livesLcd, ui->levelLcd);
 
 }

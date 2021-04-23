@@ -1,8 +1,10 @@
 QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
+CONFIG += resources_big
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -46,7 +48,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Bacteria.qrc \
+    GameOver.qrc \
+    LastFrontier.qrc \
     RedBloodCell.qrc \
     Virus1.qrc \
     Virus2.qrc \
-    WhiteBloodCell.qrc
+    WhiteBloodCell.qrc \
+    explosion.qrc \
+    laser.qrc \
+    laser2.qrc \
+    playerExplosion.qrc

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QSoundEffect>
 
 #include "player.h"
 #include "bullet.h"
@@ -28,6 +29,8 @@ protected:
 private:
     QTimer *shootTimer = new QTimer;
     bool shootTimeOut = true;
+
+    QSoundEffect laser2;
 };
 
 #endif // PLAYERMANAGER_H

@@ -5,6 +5,7 @@
 #include <ctime>
 #include <QPainter>
 #include <QTimer>
+#include <QSoundEffect>
 
 #include "enemy.h"
 #include "bullet.h"
@@ -55,6 +56,8 @@ private:
     Enemy_Movement enemy_dir = RIGHT;
     Enemy_Movement previous_enemy_dir = RIGHT;
     bool movement_flag = true;
+
+    QSoundEffect laser;
 };
 
 #endif // ENEMYMANAGER_H
