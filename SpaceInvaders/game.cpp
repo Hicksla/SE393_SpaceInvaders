@@ -161,12 +161,34 @@ void Game::CheckCollisions()
                PauseGame();
             }
         }
+        // altPlayer
+        if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, playerManager->altPlayer->rect))
+        {
+            enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
+            lives--;
+            if (lives > 0)
+            {
+                playerManager->altPlayer = new Player();
+            }else
+            {
+               playerManager->altPlayer->Alive = false;
+               lives = 0;
+               livesLcd->display(0);
+               PauseGame();
+            }
+        }
     }
 
 
     for (unsigned int j=0; j < enemyManger->enemies.size(); j++)
     {
         if (collisionDetect.RectCollsion(playerManager->player->rect, enemyManger->enemies[j].rect))
+        {
+            PauseGame();
+            break;
+        }
+        // alt player
+        if (collisionDetect.RectCollsion(playerManager->altPlayer->rect, enemyManger->enemies[j].rect))
         {
             PauseGame();
             break;
@@ -186,12 +208,23 @@ void Game::Draw(QPainter *p, QBrush *brush)
         brush->setColor(QColor(0, 255, 0));
         p->setBrush(*brush);
         p->drawImage(playerManager->player->rect, *whiteBloodCell);
-        p->drawImage(playerManager->altPlayer->rect, *whiteBloodCell);
     }else
     {
         brush->setColor(QColor(0, 0, 0));
         p->setBrush(*brush);
         p->drawRect(playerManager->player->rect);
+    }
+    // alt player
+    if (playerManager->altPlayer->Alive)
+    {
+        brush->setColor(QColor(0, 255, 0));
+        p->setBrush(*brush);
+        p->drawImage(playerManager->altPlayer->rect, *whiteBloodCell);
+    }else
+    {
+        brush->setColor(QColor(0, 0, 0));
+        p->setBrush(*brush);
+        p->drawRect(playerManager->altPlayer->rect);
     }
 
 
