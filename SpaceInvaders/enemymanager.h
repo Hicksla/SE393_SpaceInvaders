@@ -28,6 +28,9 @@ public:
 
     void IncreseSpeed();
 
+    void setEnemies(QString enemies_str_lst);
+    QString toString();
+
     std::vector<Enemy> enemies;//need to make types of enemies
     std::vector<Bullet> bullets;
 

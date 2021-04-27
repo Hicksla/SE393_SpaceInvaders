@@ -8,6 +8,8 @@
 #include <QLCDNumber>
 #include <QImage>
 #include <QSoundEffect>
+#include <QTcpSocket>
+#include <QHostAddress>
 
 #include "collisiondetector.h"
 #include "enemymanager.h"
@@ -64,6 +66,23 @@ private:
 
     CollisionDetector collisionDetect;
 
+    // network
+    void ConnectToServer(QHostAddress address, int port);
+    void SendData(QString data);
+    void ReadData();
+    void JoinGame(QString gameStr);
+    void SendEnemies();
+    void SendStats();
+    void SendBarriers();
+    void SetBarriers(QString barrier_data);
+
+    QTcpSocket clientSocket;
+    QString gameString = "waitingList";
+    QString connectLevel = "";
+
+    QTimer *netReadTimer = new QTimer;
+    QTimer *enemySendTimer = new QTimer;
+    QTimer *statsSendTimer = new QTimer;
 
 };
 

@@ -15,11 +15,13 @@ class PlayerManager : public QObject
 public:
     PlayerManager();
     void LoadPlayer();
-    void Shoot();
+    void LoadPlayers();
+    bool Shoot();
 
     void SetPlayerCanShoot();
 
     Player *player = new Player;
+    Player *altPlayer = new Player;
     std::vector<Bullet> bullets;
 
 protected:

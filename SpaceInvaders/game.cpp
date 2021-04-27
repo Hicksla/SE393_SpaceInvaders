@@ -5,6 +5,9 @@
 Game::Game()
 {
     collisionDetect = CollisionDetector();
+    ConnectToServer(QHostAddress("127.0.0.1"), 8006);
+    connect(netReadTimer, &QTimer::timeout, this, &Game::ReadData);
+    netReadTimer->setInterval(25);
 }
 void Game::AddFpsTimer(QTimer *timer)
 {
@@ -19,7 +22,7 @@ void Game::AddFpsTimer(QTimer *timer)
     gameOver.setSource(QUrl::fromLocalFile(":/GameOver/Music/06 The Victors' Homecoming.wav"));
 
     fpsTimer = timer;
-    Init();
+//    Init();
 }
 
 void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
@@ -50,7 +53,7 @@ void Game::Init()
 
     if (!playerManager->player->Alive)
     {
-        playerManager->LoadPlayer();
+        playerManager->LoadPlayers();
     }
 
     enemyManger->loadEnemies();
@@ -63,6 +66,17 @@ void Game::Init()
         gameOver.stop();
     }
     music.play();
+
+    if (connectLevel == "host") {
+            connect(enemySendTimer, &QTimer::timeout, this, &Game::SendEnemies);
+            connect(enemySendTimer, &QTimer::timeout, this, &Game::SendBarriers);
+            enemySendTimer->setInterval(500);
+            enemySendTimer->start();
+
+            connect(statsSendTimer, &QTimer::timeout, this, &Game::SendStats);
+            statsSendTimer->setInterval(3000);
+            statsSendTimer->start();
+        }
 }
 
 void Game::Update()
@@ -81,6 +95,7 @@ void Game::Update()
     CheckCollisions();
     enemyManger->updateEnemyArrayLoc();
     playerManager->player->Update();
+    playerManager->altPlayer->Update();
 
     for (unsigned int i=0; i< playerManager->bullets.size(); i++)
     {
@@ -168,13 +183,35 @@ void Game::CheckCollisions()
         {
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
-            lives--;
+            // removed for easier testing *******
+            //lives--;
             if (lives > 0)
             {
                 playerManager->player = new Player();
             }else
             {
                playerManager->player->Alive = false;
+               lives = 0;
+               livesLcd->display(0);
+               PauseGame();
+            }
+        }
+    }
+    // alt player
+    for (unsigned int i=0; i<enemyManger->bullets.size(); i++)
+    {
+        if (collisionDetect.RectCollsion(enemyManger->bullets[i].circle, playerManager->altPlayer->rect))
+        {
+            playerExplosion.play();
+            enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
+            // removed for easier testing *******
+            //lives--;
+            if (lives > 0)
+            {
+                playerManager->altPlayer = new Player();
+            }else
+            {
+               playerManager->altPlayer->Alive = false;
                lives = 0;
                livesLcd->display(0);
                PauseGame();
@@ -197,6 +234,12 @@ void Game::CheckCollisions()
     for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
     {
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
+        {
+            PauseGame();
+            break;
+        }
+        // alt player
+        if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->altPlayer->rect.y())
         {
             PauseGame();
             break;
@@ -227,6 +270,18 @@ void Game::Draw(QPainter *p, QBrush *brush)
         p->drawRect(playerManager->player->rect);
     }
 
+    // alt player
+    if (playerManager->altPlayer->Alive)
+    {
+        brush->setColor(QColor(0, 255, 0));
+        p->setBrush(*brush);
+        p->drawImage(playerManager->altPlayer->rect, *whiteBloodCell);
+    }else
+    {
+        brush->setColor(QColor(0, 0, 0));
+        p->setBrush(*brush);
+        p->drawRect(playerManager->altPlayer->rect);
+    }
 
     for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
     {
@@ -322,6 +377,7 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
         case Qt::Key_Escape:
             playerManager->player->SetPlayerPosition(390, 550);
             Init();
+            // need to add end game networking
             break;
         case Qt::Key_W:
             break;
@@ -337,12 +393,16 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
             break;
         case Qt::Key_Left:
             playerManager->player->SetMovingLeft();
+            SendData("l_1");
             break;
         case Qt::Key_Right:
             playerManager->player->SetMovingRight();
+            SendData("r_1");
             break;
         case Qt::Key_Space:
-            playerManager->Shoot();
+            if(playerManager->Shoot()) {
+                SendData("a_0_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
+            }
             break;
         }
     }
@@ -368,13 +428,177 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
             break;
         case Qt::Key_Left:
             playerManager->player->ClearMovement();
+            SendData("s_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
             break;
         case Qt::Key_Right:
             playerManager->player->ClearMovement();
+            SendData("s_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
             break;
         case Qt::Key_Space:
+            break;
+        case Qt::Key_C:
+            JoinGame("abc_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
+            break;
+        case Qt::Key_V:
+            SendData("start_0");
             break;
         }
     }
 
+}
+
+
+void Game::ConnectToServer(QHostAddress address, int port) {
+    clientSocket.connectToHost(address, port);
+    netReadTimer->start();
+}
+
+void Game::SendData(QString data) {
+    if (clientSocket.state() != QTcpSocket::ConnectedState) {
+        return;
+    }
+    clientSocket.write((data+"$").toLocal8Bit());
+
+}
+
+void Game::ReadData() {
+    if (clientSocket.state() != QTcpSocket::ConnectedState) {
+        return;
+    }
+
+
+    QString data(clientSocket.readAll());
+    if (data=="") return;
+
+    QStringList data_list = data.split("$");
+
+    for (QString& msg_data_list:data_list) {
+        if (msg_data_list == "") continue;
+        QStringList msg_data = msg_data_list.split("_");
+
+        if (msg_data[0] == "connect") {
+            connectLevel = msg_data[2];
+            if (connectLevel == "host") {
+                gameString = msg_data[1];
+            }
+            else if (connectLevel == "join") {
+                gameString = msg_data[1];
+            }
+        }
+        else if (gameString == "waitingList") {
+            return;
+        }
+
+        if (msg_data[0] == "start") {
+            Init();
+        }
+        else if (msg_data[0] == "disconnect") {
+    //        connectLevel = "";
+    //        gameString = "waitingList";
+            JoinGame("waitingList");
+        }
+        else if (msg_data[0] == "l") {
+            playerManager->altPlayer->SetMovingLeft();
+        }
+        else if (msg_data[0] == "r") {
+            playerManager->altPlayer->SetMovingRight();
+        }
+        else if (msg_data[0] == "s") {
+            playerManager->altPlayer->ClearMovement();
+            bool okx,oky;
+            int x = msg_data[1].toInt(&okx);
+            int y = msg_data[2].toInt(&oky);
+            if (okx && oky) {
+                playerManager->altPlayer->x = x;
+                playerManager->altPlayer->y = y;
+            }
+
+        }
+        else if (msg_data[0] == "a") {
+            bool okx,oky;
+            int x = msg_data[2].toInt(&okx);
+            int y = msg_data[3].toInt(&oky);
+            if (okx && oky) {
+                playerManager->bullets.push_back(Bullet(x + ((playerManager->altPlayer->w/2)-5), y, 10, 20));
+            } else {
+
+                playerManager->bullets.push_back(Bullet(playerManager->altPlayer->x + ((playerManager->altPlayer->w/2)-5), playerManager->altPlayer->y, 10, 20));
+            }
+        }
+        else if (msg_data[0] == "e") {
+            if (connectLevel == "join") {
+                // parse enemy data
+                enemyManger->setEnemies(msg_data[1]);
+                SendData("e_0");
+            }
+            else if (connectLevel == "host") {
+//                enemyManger->Start();
+            }
+        }
+        else if (msg_data[0] == "stats") {
+            bool okScore,okLives,okLevel;
+            int newScore = msg_data[1].toInt(&okScore);
+            int newLives = msg_data[2].toInt(&okLives);
+            int newLevel = msg_data[3].toInt(&okLevel);
+            if (okScore&&okLives&&okLevel) {
+                score = newScore;
+                lives = newLives;
+                level = newLevel;
+            }
+        }
+        else if (msg_data[0] == "sync") {
+            // stop everything, and start it again
+            enemyManger->Pause();
+            fpsTimer->stop();
+
+            fpsTimer->start();
+            enemyManger->Start();
+        }
+        else if (msg_data[0] == "b") {
+            SetBarriers(msg_data[1]);
+        }
+
+    }
+
+}
+
+void Game::JoinGame(QString gameStr) {
+    if (connectLevel != "attempt" && gameStr != "") {
+        QString msg = "connect_"+gameStr;
+        connectLevel = "attempt";
+        clientSocket.write(msg.toLocal8Bit());
+    }
+}
+
+void Game::SendEnemies() {
+//    enemyManger->Pause();
+    SendData("e_"+enemyManger->toString());
+}
+
+void Game::SendStats() {
+    SendData("stats_"+QString::number(score)+"_"+QString::number(lives)+"_"+QString::number(level));
+}
+
+void Game::SendBarriers() {
+    QString barrier_str;
+    for (QRect& barrier: barriers) {
+        barrier_str += QString::number(barrier.x())+":"+QString::number(barrier.y())+",";
+    }
+    SendData("b_"+barrier_str);
+}
+
+void Game::SetBarriers(QString barrier_data) {
+    ClearBarriers();
+    QStringList barrier_str_lst = barrier_data.split(",");
+    for (QString& barrier_str:barrier_str_lst) {
+        if (barrier_str == "") continue;
+        QStringList barrier_lst = barrier_str.split(":");
+        if (barrier_str == "") continue;
+        bool okx,oky;
+        int x = barrier_lst[0].toInt(&okx);
+        int y = barrier_lst[1].toInt(&oky);
+        if (!okx&&!oky) continue;
+
+        barriers.push_back(QRect(x,y,20,20));
+    }
 }

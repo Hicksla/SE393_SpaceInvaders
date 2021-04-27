@@ -9,7 +9,7 @@ EnemyManager::EnemyManager()
 
 void EnemyManager::loadEnemies()
 {
-
+    unloadEnemies();
     for (int i=0; i < 5; i++)
     {
         for (int j=0; j < 11; j++)
@@ -238,4 +238,35 @@ void EnemyManager::IncreaseLevel()
     bullets.clear();
     loadEnemies();
     Start();
+}
+
+void EnemyManager::setEnemies(QString enemies_str_lst) {
+    enemies.clear();
+    QStringList enemies_lst = enemies_str_lst.split(",");
+    for (QString& enemy_str:enemies_lst) {
+        if (enemy_str==""||enemy_str == "e") continue;
+        QStringList enemy_data = enemy_str.split(":");
+        bool okLevel,okx,oky;
+        int level = enemy_data[0].toInt(&okLevel);
+        int x = enemy_data[1].toInt(&okx);
+        int y = enemy_data[2].toInt(&oky);
+        if (!okx||!oky) return;
+
+        Enemy newEnemy(level);
+        newEnemy.SetRect(QRect(x,y,width,width));
+        enemies.push_back(newEnemy);
+    }
+}
+
+QString EnemyManager::toString() {
+    QString enemies_str;
+
+    // enemy data sep: :
+    // enemy sep: ,
+
+    for (Enemy& e:enemies) {
+         enemies_str +=QString::number(e.rowLevel)+":"+QString::number(e.rect.x())+":"+QString::number(e.rect.y())+",";
+
+    }
+    return enemies_str;
 }
