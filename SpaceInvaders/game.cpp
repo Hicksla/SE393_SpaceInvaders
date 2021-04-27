@@ -19,7 +19,6 @@ void Game::AddFpsTimer(QTimer *timer)
     gameOver.setSource(QUrl::fromLocalFile(":/GameOver/Music/06 The Victors' Homecoming.wav"));
 
     fpsTimer = timer;
-    Init();
 }
 
 void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
@@ -32,17 +31,21 @@ void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber 
 void Game::PauseGame()
 {
     music.stop();
-    gameOver.play();
     enemyManger->Pause();
     fpsTimer->stop();
+}
+
+void Game::ClearGameObjects()
+{
+    enemyManger->unloadEnemies();
+    playerManager->bullets.clear();
+    ClearBarriers();
 }
 
 
 void Game::Init()
 {
-    enemyManger->unloadEnemies();
-    playerManager->bullets.clear();
-    ClearBarriers();
+    ClearGameObjects();
 
     score = 0;
     lives = 3;
@@ -67,6 +70,7 @@ void Game::Init()
 
 void Game::Update()
 {
+
     if (enemyManger->enemies.size() <= 0)
     {
         music.stop();
@@ -177,6 +181,7 @@ void Game::CheckCollisions()
                playerManager->player->Alive = false;
                lives = 0;
                livesLcd->display(0);
+               gameOver.play();
                PauseGame();
             }
         }
@@ -188,6 +193,7 @@ void Game::CheckCollisions()
         {
             if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
             {
+                gameOver.play();
                 PauseGame();
                 break;
             }
@@ -198,6 +204,7 @@ void Game::CheckCollisions()
     {
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
         {
+            gameOver.play();
             PauseGame();
             break;
         }
@@ -320,8 +327,6 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
 
         switch(event->key()) {
         case Qt::Key_Escape:
-            playerManager->player->SetPlayerPosition(390, 550);
-            Init();
             break;
         case Qt::Key_W:
             break;

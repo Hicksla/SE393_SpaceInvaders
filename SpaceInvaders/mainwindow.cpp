@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
      game->AddFpsTimer(timer);
      game->AddUiComponents(ui->scoreLcd, ui->livesLcd, ui->levelLcd);
 
+
 }
 
 MainWindow::~MainWindow()
@@ -35,6 +36,13 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 void MainWindow::UpdateGraphics()
 {
+    if(this->isHidden() == true)
+    {
+        game->ClearGameObjects();
+        game->PauseGame();
+        return;
+    }
+
     game->Update(); // Update game objects before draw
     this->update();// ui update
 }
@@ -48,3 +56,4 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     game->KeyBoardInput(event, RELEASE);
 }
+

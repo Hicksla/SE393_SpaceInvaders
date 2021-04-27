@@ -8,6 +8,8 @@
 #include <QLCDNumber>
 #include <QImage>
 #include <QSoundEffect>
+#include <QApplication>
+#include <QMessageBox>
 
 #include "collisiondetector.h"
 #include "enemymanager.h"
@@ -32,7 +34,10 @@ public:
 
     void BuildBarriers();
     void ClearBarriers();
+    void ClearGameObjects();
+    void GameOver();
 
+    bool CloseGame = false;
 
 private:
     QTimer *fpsTimer;

@@ -1,3 +1,4 @@
+#include "startmenu.h"
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -5,8 +6,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.setFixedSize(800, 600);
-    w.show();
+    StartMenu s;
+    s.show();
+
+    MainWindow m;
+    s.game = &m;
     return a.exec();
 }

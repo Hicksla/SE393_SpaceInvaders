@@ -26,7 +26,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     player.cpp \
-    playermanager.cpp
+    playermanager.cpp \
+    startmenu.cpp
 
 HEADERS += \
     bullet.h \
@@ -36,10 +37,12 @@ HEADERS += \
     game.h \
     mainwindow.h \
     player.h \
-    playermanager.h
+    playermanager.h \
+    startmenu.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    startmenu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
