@@ -404,7 +404,12 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
                 SendData("a_0_"+QString::number(playerManager->player->x)+"_"+QString::number(playerManager->player->y));
             }
             break;
+        case Qt::Key_I:
+            SendEndGame();
+            EndGame();
+            break;
         }
+
     }
 
     else if (action == RELEASE)
@@ -557,6 +562,9 @@ void Game::ReadData() {
         else if (msg_data[0] == "b") {
             SetBarriers(msg_data[1]);
         }
+        else if (msg_data[0] == "end") {
+            EndGame();
+        }
 
     }
 
@@ -601,4 +609,12 @@ void Game::SetBarriers(QString barrier_data) {
 
         barriers.push_back(QRect(x,y,20,20));
     }
+}
+
+void Game::EndGame() {
+    lives = -2;
+}
+
+void Game::SendEndGame() {
+    SendData("end_0");
 }

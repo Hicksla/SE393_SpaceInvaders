@@ -81,6 +81,9 @@ const server = net.createServer(function(_socket) {
                 case 'b':
                     transmitData(_socket, `b_${data[1]}`);
                     break;
+                case 'end':
+                    transmitData(_socket, `end_${data[1]}`);
+                    break;
                 default:
     
             }

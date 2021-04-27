@@ -27,6 +27,7 @@ public:
     void Draw(QPainter *p, QBrush *brush);
     void CheckCollisions();
     void PauseGame();
+    void EndGame();
 
     void KeyBoardInput(QKeyEvent *key, KeyActionType action);
     void AddFpsTimer(QTimer *timer);
@@ -75,6 +76,7 @@ private:
     void SendStats();
     void SendBarriers();
     void SetBarriers(QString barrier_data);
+    void SendEndGame();
 
     QTcpSocket clientSocket;
     QString gameString = "waitingList";
