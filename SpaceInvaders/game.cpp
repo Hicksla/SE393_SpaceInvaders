@@ -32,7 +32,6 @@ void Game::PauseGame()
 {
     music.stop();
     enemyManger->Pause();
-    fpsTimer->stop();
 }
 
 void Game::ClearGameObjects()
@@ -42,10 +41,29 @@ void Game::ClearGameObjects()
     ClearBarriers();
 }
 
+void Game::GameOver()
+{
+    PauseGame();
+
+    QMessageBox msgBox;
+        msgBox.setWindowTitle("Game Over");
+        msgBox.setText("Would you like to play again?");
+        msgBox.setStandardButtons(QMessageBox::Yes);
+        msgBox.addButton(QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        if(msgBox.exec() == QMessageBox::Yes){
+          ClearGameObjects();
+          Init();
+        }else {
+          ClearGameObjects();
+          CloseGame = true;
+          gameOver.stop();
+        }
+}
 
 void Game::Init()
 {
-    ClearGameObjects();
+    CloseGame = false;
 
     score = 0;
     lives = 3;
@@ -65,7 +83,10 @@ void Game::Init()
     {
         gameOver.stop();
     }
+
+    music.setLoopCount(QSoundEffect::Infinite);
     music.play();
+
 }
 
 void Game::Update()
@@ -182,7 +203,7 @@ void Game::CheckCollisions()
                lives = 0;
                livesLcd->display(0);
                gameOver.play();
-               PauseGame();
+               GameOver();
             }
         }
     }
@@ -194,7 +215,7 @@ void Game::CheckCollisions()
             if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
             {
                 gameOver.play();
-                PauseGame();
+                GameOver();
                 break;
             }
         }
@@ -205,7 +226,7 @@ void Game::CheckCollisions()
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
         {
             gameOver.play();
-            PauseGame();
+            GameOver();
             break;
         }
     }

@@ -4,7 +4,7 @@ PlayerManager::PlayerManager()
 {
     laser2.setSource(QUrl::fromLocalFile(":/laser2/Music/laser2.wav"));
     connect(shootTimer, &QTimer::timeout, this, &PlayerManager::SetPlayerCanShoot);
-    shootTimer->setInterval(500);
+    shootTimer->setInterval(300);
 }
 
 void PlayerManager::LoadPlayer()

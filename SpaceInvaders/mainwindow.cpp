@@ -41,6 +41,11 @@ void MainWindow::UpdateGraphics()
         game->ClearGameObjects();
         game->PauseGame();
         return;
+    }else if(game->CloseGame == true)
+    {
+        game->ClearGameObjects();
+        this->close();
+        return;
     }
 
     game->Update(); // Update game objects before draw
