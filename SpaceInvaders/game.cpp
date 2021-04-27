@@ -37,7 +37,18 @@ void Game::PauseGame()
     music.stop();
     gameOver.play();
     enemyManger->Pause();
-    fpsTimer->stop();
+    //fpsTimer->stop();
+
+    QMessageBox msgBox;
+    msgBox.setFixedSize(300, 200);
+    msgBox.setText("Game Over");
+    int click = msgBox.exec();
+
+    while(click != QMessageBox::Ok)
+    {
+    }
+
+    CloseGame = true;
 }
 
 
@@ -184,7 +195,7 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            //lives--;
+            lives--;
             if (lives > 0)
             {
                 playerManager->player = new Player();
@@ -194,6 +205,7 @@ void Game::CheckCollisions()
                lives = 0;
                livesLcd->display(0);
                PauseGame();
+               EndGame();
             }
         }
     }
@@ -205,7 +217,7 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            //lives--;
+            lives--;
             if (lives > 0)
             {
                 playerManager->altPlayer = new Player();
@@ -215,6 +227,7 @@ void Game::CheckCollisions()
                lives = 0;
                livesLcd->display(0);
                PauseGame();
+               EndGame();
             }
         }
     }
@@ -226,6 +239,7 @@ void Game::CheckCollisions()
             if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
             {
                 PauseGame();
+                EndGame();
                 break;
             }
         }
@@ -236,12 +250,14 @@ void Game::CheckCollisions()
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
         {
             PauseGame();
+            EndGame();
             break;
         }
         // alt player
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->altPlayer->rect.y())
         {
             PauseGame();
+            EndGame();
             break;
         }
     }
@@ -405,7 +421,6 @@ void Game::KeyBoardInput(QKeyEvent *event, KeyActionType action)
             }
             break;
         case Qt::Key_I:
-            SendEndGame();
             EndGame();
             break;
         }
@@ -612,7 +627,7 @@ void Game::SetBarriers(QString barrier_data) {
 }
 
 void Game::EndGame() {
-    lives = -2;
+    SendEndGame();
 }
 
 void Game::SendEndGame() {

@@ -10,6 +10,7 @@
 #include <QSoundEffect>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QMessageBox>
 
 #include "collisiondetector.h"
 #include "enemymanager.h"
@@ -35,7 +36,9 @@ public:
 
     void BuildBarriers();
     void ClearBarriers();
+    void ClearObjects();
 
+    bool CloseGame = false;
 
 private:
     QTimer *fpsTimer;
