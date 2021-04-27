@@ -112,6 +112,7 @@ void EnemyManager::IncreseSpeed()
         }
     }
 
+
 }
 
 void EnemyManager::updateEnemyArrayLoc()
@@ -223,7 +224,7 @@ void EnemyManager::Pause()
 void EnemyManager::Start()
 {
     xVel = 1.0;
-    yVel = 6.0;
+    yVel = 12.0;
     mysteryShipVel *= -1;
     mysteryShipsLeft = 2;
     mysteryShipVel = 6.0;

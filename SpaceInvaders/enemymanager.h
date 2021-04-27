@@ -39,7 +39,7 @@ private:
     QTimer *shootTimer = new QTimer;
 
     double xVel = 1.0;
-    double yVel = 6.0;
+    double yVel = 12.0;
     double mysteryShipVel = 4.0;
 
     int mysteryShipsLeft = 2;

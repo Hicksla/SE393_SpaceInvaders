@@ -180,6 +180,8 @@ void Game::CheckCollisions()
                     break;
                 }
 
+                enemyManger->IncreseSpeed();
+
                 explosion.play();
                 enemyManger->enemies.erase(enemyManger->enemies.begin() + j);
                 playerManager->bullets.erase(playerManager->bullets.begin() + i);
