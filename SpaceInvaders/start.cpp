@@ -29,7 +29,7 @@ void Start::on_singlePlayerBtn_clicked()
 void Start::on_multiplayerBtn_clicked()
 {
     gameWindow = new MainWindow();
-    gameWindow->game->ConnectToServer(QHostAddress("10.74.0.121"), 8006);
+    gameWindow->game->ConnectToServer(QHostAddress("127.0.0.1"), 8006);
     gameWindow->show();
     gameWindow->game->JoinGame(ui->gameStringTxt->text());
 }
