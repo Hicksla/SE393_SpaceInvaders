@@ -62,4 +62,7 @@ RESOURCES += \
     explosion.qrc \
     laser.qrc \
     laser2.qrc \
-    playerExplosion.qrc
+    playerExplosion.qrc \
+    syringe.qrc \
+    whitebloodcellblue.qrc \
+    whitebloodcellred.qrc
