@@ -58,6 +58,9 @@ private:
     QImage *whiteBloodCell = new QImage;
     QImage *redBloodCell = new QImage;
     QImage *DNA = new QImage;
+    QImage *whiteBloodCellRed = new QImage;
+    QImage *whiteBloodCellBlue = new QImage;
+    QImage *syringe = new QImage;
 
     QSoundEffect music;
     QSoundEffect explosion;

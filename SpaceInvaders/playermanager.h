@@ -24,6 +24,8 @@ public:
     Player *altPlayer = new Player;
     std::vector<Bullet> bullets;
 
+    QSoundEffect laser2;
+
 protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -31,8 +33,6 @@ protected:
 private:
     QTimer *shootTimer = new QTimer;
     bool shootTimeOut = true;
-
-    QSoundEffect laser2;
 };
 
 #endif // PLAYERMANAGER_H

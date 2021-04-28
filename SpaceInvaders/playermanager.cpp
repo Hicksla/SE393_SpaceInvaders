@@ -30,7 +30,7 @@ bool PlayerManager::Shoot()
     if (shootTimeOut)
     {
        laser2.play();
-       bullets.push_back(Bullet(player->x + ((player->w/2)-5), player->y, 10, 20));
+       bullets.push_back(Bullet(player->x + ((player->w/2)-5), player->y, 20, 20));
        shootTimeOut = false;
        shootTimer->start();
        return true;

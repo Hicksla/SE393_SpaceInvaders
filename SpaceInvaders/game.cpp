@@ -15,6 +15,9 @@ void Game::AddFpsTimer(QTimer *timer)
     virus2->load(":/images/virus2.png");
     bacteria->load(":/images/bacteria.png");
     whiteBloodCell->load(":/images/whitebloodcell.png");
+    whiteBloodCellBlue->load(":/images/whitebloodcell2.png");
+    whiteBloodCellRed->load(":/images/whitebloodcell1.png");
+    syringe->load(":/images/syringe.png");
     redBloodCell->load(":/images/redbloodcell.png");
     DNA->load(":/images/dna.png");
     music.setSource(QUrl::fromLocalFile(":/Last Frontier/Music/08 The Last Frontier.wav"));
@@ -268,30 +271,10 @@ void Game::Draw(QPainter *p, QBrush *brush)
     p->setBrush(*brush);
     p->drawRects(barriers.data(), barriers.size());
 
-    if (playerManager->player->Alive)
-    {
-        brush->setColor(QColor(0, 255, 0));
-        p->setBrush(*brush);
-        p->drawImage(playerManager->player->rect, *whiteBloodCell);
-    }else
-    {
-        brush->setColor(QColor(0, 0, 0));
-        p->setBrush(*brush);
-        p->drawRect(playerManager->player->rect);
-    }
 
-    // alt player
-    if (playerManager->altPlayer->Alive)
-    {
-        brush->setColor(QColor(0, 255, 0));
-        p->setBrush(*brush);
-        p->drawImage(playerManager->altPlayer->rect, *whiteBloodCell);
-    }else
-    {
-        brush->setColor(QColor(0, 0, 0));
-        p->setBrush(*brush);
-        p->drawRect(playerManager->altPlayer->rect);
-    }
+    p->drawImage(playerManager->player->rect, *whiteBloodCellBlue);
+    p->drawImage(playerManager->altPlayer->rect, *whiteBloodCellRed);
+
 
     for (unsigned int i=0; i<enemyManger->enemies.size(); i++)
     {
@@ -322,11 +305,9 @@ void Game::Draw(QPainter *p, QBrush *brush)
         p->drawImage(enemyManger->bullets[i].circle, *DNA);
     }
 
-    brush->setColor(QColor(255,69,0));
-    p->setBrush(*brush);
     for (unsigned int i=0; i< playerManager->bullets.size(); i++)
     {
-        p->drawEllipse(playerManager->bullets[i].circle);
+        p->drawImage(playerManager->bullets[i].circle, *syringe);
     }
 
 
@@ -536,10 +517,12 @@ void Game::ReadData() {
             int x = msg_data[2].toInt(&okx);
             int y = msg_data[3].toInt(&oky);
             if (okx && oky) {
-                playerManager->bullets.push_back(Bullet(x + ((playerManager->altPlayer->w/2)-5), y, 10, 20));
+                playerManager->bullets.push_back(Bullet(x + ((playerManager->altPlayer->w/2)-5), y, 20, 20));
+                playerManager->laser2.play();
             } else {
 
-                playerManager->bullets.push_back(Bullet(playerManager->altPlayer->x + ((playerManager->altPlayer->w/2)-5), playerManager->altPlayer->y, 10, 20));
+                playerManager->bullets.push_back(Bullet(playerManager->altPlayer->x + ((playerManager->altPlayer->w/2)-5), playerManager->altPlayer->y, 20, 20));
+                playerManager->laser2.play();
             }
         }
         else if (msg_data[0] == "e") {
