@@ -42,7 +42,7 @@ const server = net.createServer(function(_socket) {
                         games[_socket.gameString] = [_socket];
                         console.log(`${_socket.info}> ${oldGameString} -> ${_socket.gameString}`);
                         _socket.connectLevel = 'host';
-                        sendData(_socket,`connect_${_socket.gameString}_host`);
+                        sendData(_socket,`connect_${_socket.gameString}_host`,true);
                     } else if ((games[_socket.gameString].length == 1 || _socket.gameString=='waitingList') && !games[_socket.gameString].includes(_socket)) {
                         if (games['waitingList'].includes(_socket)) {
                             games['waitingList'].splice(games['waitingList'].indexOf(_socket),1);
@@ -50,10 +50,10 @@ const server = net.createServer(function(_socket) {
                         games[_socket.gameString].push(_socket);
                         console.log(`${_socket.info}> ${oldGameString} -> ${_socket.gameString}`);
                         _socket.connectLevel = 'join';
-                        sendData(_socket,`connect_${_socket.gameString}_join`);
+                        sendData(_socket,`connect_${_socket.gameString}_join`,true);
                     } else {
                         _socket.connectLevel = 'fail';
-                        sendData(_socket,`connect_${_socket.gameString}_fail`);
+                        sendData(_socket,`connect_${_socket.gameString}_fail`,true);
                     }
                     break;
                 case 'l':
@@ -128,8 +128,11 @@ function endGame(socket) {
     
 }
 
-function sendData(socket, data) {
+function sendData(socket, data,log=false) {
     if (!socket.destroyed) {
+        if (log) {
+            console.log(data);
+        }
         socket.write(`${data}$`);
     }
 }

@@ -37,10 +37,11 @@ void Game::PauseGame()
     music.stop();
     gameOver.play();
     enemyManger->Pause();
+    netReadTimer->stop();
 
     QMessageBox msgBox;
     msgBox.setFixedSize(300, 200);
-    msgBox.setText("Game Over");
+    msgBox.setText("Game Over "+ connectLevel);
     if(msgBox.exec() == QMessageBox::Ok)
     {
         CloseGame = true;
@@ -51,6 +52,7 @@ void Game::PauseGame()
 
 void Game::Init()
 {
+    gameRunning = true;
     score = 0;
     lives = 3;
     level = 1;
@@ -197,6 +199,7 @@ void Game::CheckCollisions()
                lives = 0;
                livesLcd->display(0);
                EndGame();
+               return;
             }
         }
     }
@@ -217,6 +220,7 @@ void Game::CheckCollisions()
                lives = 0;
                livesLcd->display(0);
                EndGame();
+               return;
             }
         }
     }
@@ -228,7 +232,8 @@ void Game::CheckCollisions()
             if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
             {
                 EndGame();
-                break;
+                return;
+//                break;
             }
         }
     }
@@ -237,15 +242,16 @@ void Game::CheckCollisions()
     {
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->player->rect.y())
         {
-            PauseGame();
             EndGame();
-            break;
+            return;
+//            break;
         }
         // alt player
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->altPlayer->rect.y())
         {
             EndGame();
-            break;
+            return;
+//            break;
         }
     }
 
@@ -484,6 +490,9 @@ void Game::ReadData() {
         QStringList msg_data = msg_data_list.split("_");
 
         if (msg_data[0] == "connect") {
+            qDebug() << msg_data[0];
+            qDebug() << msg_data[1];
+            qDebug() << msg_data[2];
             connectLevel = msg_data[2];
             if (connectLevel == "host") {
                 gameString = msg_data[1];
@@ -565,6 +574,7 @@ void Game::ReadData() {
             SetBarriers(msg_data[1]);
         }
         else if (msg_data[0] == "end") {
+            qDebug() << connectLevel << " received end";
             EndGame();
         }
 
@@ -614,8 +624,12 @@ void Game::SetBarriers(QString barrier_data) {
 }
 
 void Game::EndGame() {
-    SendEndGame();
-    PauseGame();
+     if (gameRunning) {
+         PauseGame();
+         SendEndGame();
+         gameRunning = false;
+     }
+
 }
 
 void Game::SendEndGame() {

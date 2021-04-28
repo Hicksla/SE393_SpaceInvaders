@@ -1,5 +1,6 @@
 #include "start.h"
 #include "ui_start.h"
+#include <QProcess>
 
 
 Start::Start(QWidget *parent) :
@@ -15,6 +16,12 @@ Start::~Start()
 }
 
 void Start::on_singlePlayerBtn_clicked()
+{
+//    QProcess process;
+//    process.startDetached("C:\\Users\\Brayton\\Desktop\\release\\SpaceInvaders.exe");
+}
+
+void Start::on_multiplayerBtn_clicked()
 {
     gameWindow = new MainWindow();
     gameWindow->show();

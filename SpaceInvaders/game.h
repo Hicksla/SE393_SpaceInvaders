@@ -40,6 +40,7 @@ public:
 
     void JoinGame(QString gameStr);
 
+    bool gameRunning = false;
     bool CloseGame = false;
 
 private:

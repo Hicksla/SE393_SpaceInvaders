@@ -21,6 +21,8 @@ public:
 private slots:
     void on_singlePlayerBtn_clicked();
 
+    void on_multiplayerBtn_clicked();
+
 private:
     Ui::Start *ui;
 };
