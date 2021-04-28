@@ -16,6 +16,7 @@ void Game::AddFpsTimer(QTimer *timer)
     bacteria->load(":/images/bacteria.png");
     whiteBloodCell->load(":/images/whitebloodcell.png");
     redBloodCell->load(":/images/redbloodcell.png");
+    DNA->load(":/images/dna.png");
     music.setSource(QUrl::fromLocalFile(":/Last Frontier/Music/08 The Last Frontier.wav"));
     explosion.setSource(QUrl::fromLocalFile(":/explosion/Music/explosion.wav"));
     playerExplosion.setSource(QUrl::fromLocalFile(":/playerExplosion/Music/atari_boom5.wav"));
@@ -316,6 +317,11 @@ void Game::Draw(QPainter *p, QBrush *brush)
         }
     }
 
+    for (unsigned int i=0; i< enemyManger->bullets.size(); i++)
+    {
+        p->drawImage(enemyManger->bullets[i].circle, *DNA);
+    }
+
     brush->setColor(QColor(255,69,0));
     p->setBrush(*brush);
     for (unsigned int i=0; i< playerManager->bullets.size(); i++)
@@ -323,12 +329,7 @@ void Game::Draw(QPainter *p, QBrush *brush)
         p->drawEllipse(playerManager->bullets[i].circle);
     }
 
-    brush->setColor(QColor(255,0,0));
-    p->setBrush(*brush);
-    for (unsigned int i=0; i< enemyManger->bullets.size(); i++)
-    {
-        p->drawEllipse(enemyManger->bullets[i].circle);
-    }
+
 }
 
 void Game::BuildBarriers()

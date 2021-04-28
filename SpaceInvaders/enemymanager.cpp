@@ -202,7 +202,7 @@ void EnemyManager::GenEnemyBullets()
 
    r = rand() % enemies.size();
 
-   Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 10, -6);
+   Bullet b(enemies[r].rect.x(), enemies[r].rect.y()+20, 15, -6);
    bullets.push_back(b);
    laser.play();
 

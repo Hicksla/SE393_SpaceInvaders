@@ -57,6 +57,7 @@ private:
     QImage *bacteria = new QImage;
     QImage *whiteBloodCell = new QImage;
     QImage *redBloodCell = new QImage;
+    QImage *DNA = new QImage;
 
     QSoundEffect music;
     QSoundEffect explosion;

@@ -58,6 +58,7 @@ RESOURCES += \
     Virus1.qrc \
     Virus2.qrc \
     WhiteBloodCell.qrc \
+    dna.qrc \
     explosion.qrc \
     laser.qrc \
     laser2.qrc \
