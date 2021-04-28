@@ -37,7 +37,7 @@ public:
     int enemiesKilled = 0;
 private:
     QTimer *arrayMovementTimer = new QTimer;// in ms
-    int arrayStartingInterval = 16;
+    int arrayStartingInterval = 300;
     int arrayMovementInterval = arrayStartingInterval;
     QTimer *shootTimer = new QTimer;
 

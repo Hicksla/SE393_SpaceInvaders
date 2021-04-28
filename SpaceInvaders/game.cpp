@@ -104,7 +104,7 @@ void Game::Update()
     }
 
     CheckCollisions();
-    enemyManger->updateEnemyArrayLoc();
+    //enemyManger->updateEnemyArrayLoc();
     playerManager->player->Update();
     playerManager->altPlayer->Update();
 
@@ -195,7 +195,7 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            lives--;
+            //lives--;
             if (lives > 0)
             {
                 playerManager->player = new Player();
@@ -217,7 +217,7 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            lives--;
+            //lives--;
             if (lives > 0)
             {
                 playerManager->altPlayer = new Player();

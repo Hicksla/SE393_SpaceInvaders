@@ -38,6 +38,8 @@ public:
     void ClearBarriers();
     void ClearObjects();
 
+    void JoinGame(QString gameStr);
+
     bool CloseGame = false;
 
 private:
@@ -74,7 +76,6 @@ private:
     void ConnectToServer(QHostAddress address, int port);
     void SendData(QString data);
     void ReadData();
-    void JoinGame(QString gameStr);
     void SendEnemies();
     void SendStats();
     void SendBarriers();

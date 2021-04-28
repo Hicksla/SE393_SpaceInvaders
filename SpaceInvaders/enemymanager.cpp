@@ -5,6 +5,7 @@ EnemyManager::EnemyManager()
 {
     laser.setSource(QUrl::fromLocalFile(":/laser/Music/laser.wav"));
     connect(shootTimer, &QTimer::timeout, this, &EnemyManager::GenEnemyBullets);
+    connect(arrayMovementTimer, &QTimer::timeout, this, &EnemyManager::updateEnemyArrayLoc);
 }
 
 void EnemyManager::loadEnemies()
@@ -222,14 +223,16 @@ void EnemyManager::Pause()
 
 void EnemyManager::Start()
 {
-    xVel = 1.0;
-    yVel = 6.0;
-    mysteryShipVel *= -1;
+    xVel = 20.0;
+    yVel = 26.0;
+    mysteryShipVel *= -30;
     mysteryShipsLeft = 2;
-    mysteryShipVel = 6.0;
+    mysteryShipVel = 30.0;
     maxSpeed = false;
     shootTimer->setInterval(1200);
     shootTimer->start();
+    arrayMovementTimer->setInterval(arrayMovementInterval);
+    arrayMovementTimer->start();
 }
 
 void EnemyManager::IncreaseLevel()
