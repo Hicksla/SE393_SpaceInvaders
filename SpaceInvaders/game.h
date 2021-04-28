@@ -42,6 +42,7 @@ public:
 
     bool gameRunning = false;
     bool CloseGame = false;
+    bool isMultiplayer;
 
 private:
     QTimer *fpsTimer;
@@ -94,6 +95,7 @@ private:
     QTimer *netReadTimer = new QTimer;
     QTimer *enemySendTimer = new QTimer;
     QTimer *statsSendTimer = new QTimer;
+
 
 };
 
