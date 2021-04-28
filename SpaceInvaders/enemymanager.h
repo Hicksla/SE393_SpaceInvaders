@@ -43,7 +43,7 @@ private:
 
     double xVel = 1.0;
     double yVel = 6.0;
-    double mysteryShipVel = 4.0;
+    double mysteryShipVel = 30.0;
 
     int mysteryShipsLeft = 2;
 

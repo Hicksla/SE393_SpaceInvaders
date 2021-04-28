@@ -34,6 +34,7 @@ void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber 
 
 void Game::PauseGame()
 {
+
     music.stop();
     gameOver.play();
     enemyManger->Pause();
@@ -42,13 +43,10 @@ void Game::PauseGame()
     QMessageBox msgBox;
     msgBox.setFixedSize(300, 200);
     msgBox.setText("Game Over");
-    int click = msgBox.exec();
-
-    while(click != QMessageBox::Ok)
+    if(msgBox.exec() == QMessageBox::Ok)
     {
+        CloseGame = true;
     }
-
-    CloseGame = true;
 }
 
 
@@ -632,4 +630,5 @@ void Game::EndGame() {
 
 void Game::SendEndGame() {
     SendData("end_0");
+    JoinGame("waitingList");
 }

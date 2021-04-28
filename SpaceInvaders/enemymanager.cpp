@@ -188,18 +188,10 @@ void EnemyManager::updateEnemyArrayLoc()
         Enemy mysteryShip(-1);
         mysteryShip.SetRect(QRect(145, 80, 30, 30));
         enemies.push_back(mysteryShip);
-        mysteryShipVel = 4.0;
+        mysteryShipVel = 30.0;
         mysteryShipsLeft--;
 
-    }else if (enemies.size() <= ENEMYSTARTAMOUNT - 39 && mysteryShipsLeft == 1)
-    {
-        Enemy mysteryShip(-1);
-        enemies.push_back(mysteryShip);
-        mysteryShip.SetRect(QRect(655, 80, 30, 30));
-        mysteryShipVel = -4.0;
-        mysteryShipsLeft--;
     }
-
 }
 
 void EnemyManager::GenEnemyBullets()
@@ -225,7 +217,6 @@ void EnemyManager::Start()
 {
     xVel = 20.0;
     yVel = 26.0;
-    mysteryShipVel *= -30;
     mysteryShipsLeft = 2;
     mysteryShipVel = 30.0;
     maxSpeed = false;
