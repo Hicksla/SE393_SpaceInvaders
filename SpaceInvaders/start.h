@@ -23,6 +23,8 @@ private slots:
 
     void on_multiplayerBtn_clicked();
 
+    void on_Exit_clicked();
+
 private:
     Ui::Start *ui;
 };

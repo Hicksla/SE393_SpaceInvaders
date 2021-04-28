@@ -27,3 +27,8 @@ void Start::on_multiplayerBtn_clicked()
     gameWindow->show();
     gameWindow->game->JoinGame(ui->gameStringTxt->text());
 }
+
+void Start::on_Exit_clicked()
+{
+    QApplication::exit();
+}
