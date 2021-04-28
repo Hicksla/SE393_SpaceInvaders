@@ -566,7 +566,6 @@ void Game::ReadData() {
         }
         else if (msg_data[0] == "end") {
             EndGame();
-            PauseGame();
         }
 
     }
