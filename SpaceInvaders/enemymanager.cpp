@@ -211,6 +211,7 @@ void EnemyManager::GenEnemyBullets()
 void EnemyManager::Pause()
 {
     shootTimer->stop();
+    arrayMovementTimer->stop();
 }
 
 void EnemyManager::Start()

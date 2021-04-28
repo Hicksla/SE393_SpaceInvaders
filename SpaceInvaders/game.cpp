@@ -22,7 +22,6 @@ void Game::AddFpsTimer(QTimer *timer)
     gameOver.setSource(QUrl::fromLocalFile(":/GameOver/Music/06 The Victors' Homecoming.wav"));
 
     fpsTimer = timer;
-//    Init();
 }
 
 void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
@@ -38,7 +37,6 @@ void Game::PauseGame()
     music.stop();
     gameOver.play();
     enemyManger->Pause();
-    //fpsTimer->stop();
 
     QMessageBox msgBox;
     msgBox.setFixedSize(300, 200);
@@ -47,15 +45,12 @@ void Game::PauseGame()
     {
         CloseGame = true;
     }
+
 }
 
 
 void Game::Init()
 {
-    enemyManger->unloadEnemies();
-    playerManager->bullets.clear();
-    ClearBarriers();
-
     score = 0;
     lives = 3;
     level = 1;
@@ -193,16 +188,14 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            //lives--;
+            lives--;
             if (lives > 0)
             {
                 playerManager->player = new Player();
             }else
             {
-               playerManager->player->Alive = false;
                lives = 0;
                livesLcd->display(0);
-               PauseGame();
                EndGame();
             }
         }
@@ -215,16 +208,14 @@ void Game::CheckCollisions()
             playerExplosion.play();
             enemyManger->bullets.erase(enemyManger->bullets.begin() + i);
             // removed for easier testing *******
-            //lives--;
+            lives--;
             if (lives > 0)
             {
                 playerManager->altPlayer = new Player();
             }else
             {
-               playerManager->altPlayer->Alive = false;
                lives = 0;
                livesLcd->display(0);
-               PauseGame();
                EndGame();
             }
         }
@@ -236,7 +227,6 @@ void Game::CheckCollisions()
         {
             if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= barriers[j].y())
             {
-                PauseGame();
                 EndGame();
                 break;
             }
@@ -254,7 +244,6 @@ void Game::CheckCollisions()
         // alt player
         if (enemyManger->enemies[i].rect.y()+enemyManger->enemies[i].rect.height() >= playerManager->altPlayer->rect.y())
         {
-            PauseGame();
             EndGame();
             break;
         }
@@ -577,6 +566,7 @@ void Game::ReadData() {
         }
         else if (msg_data[0] == "end") {
             EndGame();
+            PauseGame();
         }
 
     }
@@ -585,7 +575,7 @@ void Game::ReadData() {
 
 void Game::JoinGame(QString gameStr) {
     if (connectLevel != "attempt" && gameStr != "") {
-        QString msg = "connect_"+gameStr;
+        QString msg = "connect_"+gameStr+"$";
         connectLevel = "attempt";
         clientSocket.write(msg.toLocal8Bit());
     }
@@ -626,6 +616,7 @@ void Game::SetBarriers(QString barrier_data) {
 
 void Game::EndGame() {
     SendEndGame();
+    PauseGame();
 }
 
 void Game::SendEndGame() {

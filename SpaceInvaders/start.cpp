@@ -16,6 +16,7 @@ Start::~Start()
 
 void Start::on_singlePlayerBtn_clicked()
 {
+    gameWindow = new MainWindow();
     gameWindow->show();
     gameWindow->game->JoinGame(ui->gameStringTxt->text());
 }

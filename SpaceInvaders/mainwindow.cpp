@@ -35,17 +35,16 @@ void MainWindow::paintEvent(QPaintEvent *e)
 
 void MainWindow::UpdateGraphics()
 {
-    if(this->isHidden() == true)
-        {
-            return;
-        }else if(game->CloseGame == true)
-        {
-            this->close();
-            return;
-        }
+    if(game->CloseGame == true)
+    {
+        this->close();
+        return;
+    }else{
 
-    game->Update(); // Update game objects before draw
-    this->update();// ui update
+         game->Update(); // Update game objects before draw
+         this->update();// ui update
+     }
+
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
