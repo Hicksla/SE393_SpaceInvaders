@@ -25,6 +25,8 @@ private slots:
 
     void on_Exit_clicked();
 
+    void on_help_btn_clicked();
+
 private:
     Ui::Start *ui;
 };

@@ -24,6 +24,7 @@ SOURCES += \
     enemy.cpp \
     enemymanager.cpp \
     game.cpp \
+    helpmenu.cpp \
     main.cpp \
     mainwindow.cpp \
     player.cpp \
@@ -36,12 +37,15 @@ HEADERS += \
     enemy.h \
     enemymanager.h \
     game.h \
+    helpmenu.h \
     mainwindow.h \
     player.h \
     playermanager.h \
     start.h
 
 FORMS += \
+    helpMenu.ui \
+    helpmenu.ui \
     mainwindow.ui \
     start.ui
 

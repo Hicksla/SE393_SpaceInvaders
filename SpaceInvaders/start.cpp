@@ -1,6 +1,7 @@
 #include "start.h"
 #include "ui_start.h"
 #include <QProcess>
+#include "helpmenu.h"
 
 
 Start::Start(QWidget *parent) :
@@ -37,4 +38,10 @@ void Start::on_multiplayerBtn_clicked()
 void Start::on_Exit_clicked()
 {
     QApplication::exit();
+}
+
+void Start::on_help_btn_clicked()
+{
+    HelpMenu *help = new HelpMenu();
+    help->show();
 }
