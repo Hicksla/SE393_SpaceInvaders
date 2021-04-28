@@ -18,8 +18,9 @@ Start::~Start()
 void Start::on_singlePlayerBtn_clicked()
 {
     gameWindow = new MainWindow();
-    gameWindow->game->isMultiplayer = false;
     gameWindow->show();
+    gameWindow->game->Init();
+    gameWindow->game->playerManager->altPlayer->SetPlayerPosition(830,630);
 
 //    QProcess process;
 //    process.startDetached("C:\\Users\\Brayton\\Desktop\\release\\SpaceInvaders.exe");
@@ -28,7 +29,7 @@ void Start::on_singlePlayerBtn_clicked()
 void Start::on_multiplayerBtn_clicked()
 {
     gameWindow = new MainWindow();
-    gameWindow->game->isMultiplayer = true;
+    gameWindow->game->ConnectToServer(QHostAddress("10.74.0.121"), 8006);
     gameWindow->show();
     gameWindow->game->JoinGame(ui->gameStringTxt->text());
 }

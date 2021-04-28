@@ -39,10 +39,12 @@ public:
     void ClearObjects();
 
     void JoinGame(QString gameStr);
+    void ConnectToServer(QHostAddress address, int port);
 
     bool gameRunning = false;
     bool CloseGame = false;
-    bool isMultiplayer;
+
+    PlayerManager *playerManager = new PlayerManager;
 
 private:
     QTimer *fpsTimer;
@@ -74,12 +76,10 @@ private:
     QRect *backgroundRect = new QRect(0, 0, 800, 600);
 
     EnemyManager *enemyManger = new EnemyManager;
-    PlayerManager *playerManager = new PlayerManager;
 
     CollisionDetector collisionDetect;
 
     // network
-    void ConnectToServer(QHostAddress address, int port);
     void SendData(QString data);
     void ReadData();
     void SendEnemies();
@@ -95,7 +95,6 @@ private:
     QTimer *netReadTimer = new QTimer;
     QTimer *enemySendTimer = new QTimer;
     QTimer *statsSendTimer = new QTimer;
-
 
 };
 

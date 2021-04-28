@@ -5,9 +5,6 @@
 Game::Game()
 {
     collisionDetect = CollisionDetector();
-    if (isMultiplayer) {
-        ConnectToServer(QHostAddress("10.74.0.121"), 8006);
-    }
 //    ConnectToServer(QHostAddress("3.139.31.48"), 8006);
     connect(netReadTimer, &QTimer::timeout, this, &Game::ReadData);
     netReadTimer->setInterval(25);
@@ -29,9 +26,7 @@ void Game::AddFpsTimer(QTimer *timer)
     gameOver.setSource(QUrl::fromLocalFile(":/GameOver/Music/06 The Victors' Homecoming.wav"));
 
     fpsTimer = timer;
-    if (!isMultiplayer) {
-        Init();
-    }
+
 }
 
 void Game::AddUiComponents(QLCDNumber *scoreUi, QLCDNumber *livesUi, QLCDNumber *levelUi)
@@ -71,9 +66,6 @@ void Game::Init()
     {
         playerManager->LoadPlayers();
 
-    }
-    if (!isMultiplayer) {
-        playerManager->altPlayer->SetPlayerPosition(830,630);
     }
 
     enemyManger->loadEnemies();
