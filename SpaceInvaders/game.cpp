@@ -46,7 +46,7 @@ void Game::PauseGame()
 
     QMessageBox msgBox;
     msgBox.setFixedSize(300, 200);
-    msgBox.setText("Game Over "+ connectLevel);
+    msgBox.setText("Game Over ");
     if(msgBox.exec() == QMessageBox::Ok)
     {
         CloseGame = true;
